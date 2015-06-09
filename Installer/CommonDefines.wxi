@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- CommonDefines.wxi includes all the common variables -->
+<Include xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <?if $(var.Platform) = x86 ?>
+    <?define ProgramFilesFolder="ProgramFilesFolder"?>
+    <?define RootRegistryKey="Software\Microsoft"?>
+    <?else ?>
+    <?define ProgramFilesFolder="ProgramFiles64Folder"?>
+    <?define RootRegistryKey="Software\wow6432node\Microsoft"?>
+    <?endif ?>
+
+    <!-- WWT product description strings -->
+    <?define ProductManufacturer="Microsoft Research"?>
+    <?define ProductName="WorldWide Telescope Add-in for Excel"?>
+    <?define ProductDescription="WorldWide Telescope Add-in for Excel"?>
+
+    <!-- Build version number and GUID-->
+    <?define RTMVersionNumber="1.0.8.0"?>
+    <?define ProductGuid="8AC4CA26-65CF-49CF-8E6E-7F2ABFDB48C2"?>
+
+    <!-- WWT Folder names -->
+    <?define WWTInstallationFolder="WorldWide Telescope Add-in for Excel"?>
+    <?define LicenseFolderName="License"?>
+    <?define ProgramFilesFolderName="Program Files"?>
+    <?define MicrosoftResearchFolderName="Microsoft Research"?>
+  
+    <!-- Folder Path for the binaries -->
+    <?define BinariesPath="Binaries"?>    
+    <?define licenseRtf="$(var.ProjectDir)..\Installer\Eula.rtf"?>
+
+  <?define bannerBmp="$(var.ProjectDir)Bitmaps\bannrbmp.bmp"?>
+  <?define dialogBmp="$(var.ProjectDir)Bitmaps\dlgbmp.bmp"?>
+    <!-- Add-in name (registry entry will use this name)-->
+    <?define ExcelAddinName="Microsoft.Research.Wwt.Excel.Addin"?>
+    <!-- Add-in friendly name (registry entry will use this friendly name)-->
+    <?define ExcelAddinFriendlyName="WorldWide Telescope Add-in for Excel"?>
+    <!-- Add-in description -->
+    <?define ExcelAddinDescription="WorldWide Telescope Add-in for Excel - Excel add-in created with Visual Studio Tools for Office"?>
+</Include>

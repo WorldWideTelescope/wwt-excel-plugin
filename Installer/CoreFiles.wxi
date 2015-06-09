@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+
+  <!-- License -->
+  <DirectoryRef Id="LicenseFolder">
+    <Component Id="LicenseStore" Guid="{B3361749-529F-4a8d-948B-C9CB6B3A5319}" KeyPath="yes">
+      <File Id="LicenseDoc" Source="Eula.rtf" DiskId="1" />
+    </Component>
+  </DirectoryRef>
+
+  <DirectoryRef Id="INSTALLDIR">
+    <Component Id="WWTAddinComponent" Guid="{6A60CCE1-31DD-47f0-A5AE-E237131F37F1}" KeyPath="yes">
+      <File Id="Microsoft.Research.Wwt.Excel.Addin.dll" Name="Microsoft.Research.Wwt.Excel.Addin.dll" Source="$(var.ProjectDir)..\..\bin\$(var.Configuration)\Microsoft.Research.Wwt.Excel.Addin.dll" />
+      <File Id="Microsoft.Research.Wwt.Excel.Addin.dll.manifest" Name="Microsoft.Research.Wwt.Excel.Addin.dll.manifest" Source="$(var.ProjectDir)..\..\bin\$(var.Configuration)\Microsoft.Research.Wwt.Excel.Addin.dll.manifest" />
+      <File Id="Microsoft.Research.Wwt.Excel.Addin.vsto" Name="Microsoft.Research.Wwt.Excel.Addin.vsto" Source="$(var.ProjectDir)..\..\bin\$(var.Configuration)\Microsoft.Research.Wwt.Excel.Addin.vsto" />
+      <File Id="Microsoft.Research.Wwt.Excel.Common.dll" Name="Microsoft.Research.Wwt.Excel.Common.dll" Source="$(var.ProjectDir)..\..\bin\$(var.Configuration)\Microsoft.Research.Wwt.Excel.Common.dll" />
+      <File Id="Microsoft.Office.Tools.Common.v4.0.Utilities.dll" Name="Microsoft.Office.Tools.Common.v4.0.Utilities.dll" Source="$(var.ProjectDir)..\..\bin\$(var.Configuration)\Microsoft.Office.Tools.Common.v4.0.Utilities.dll" />
+      <File Id="Microsoft.Expression.Drawing.dll" Name="Microsoft.Expression.Drawing.dll" Source="$(var.ProjectDir)..\..\bin\$(var.Configuration)\Microsoft.Expression.Drawing.dll" />
+      <File Id="Microsoft.Expression.Interactions.dll" Name="Microsoft.Expression.Interactions.dll" Source="$(var.ProjectDir)..\..\bin\$(var.Configuration)\Microsoft.Expression.Interactions.dll" />
+      <File Id="System.Windows.Interactivity.dll" Name="System.Windows.Interactivity.dll" Source="$(var.ProjectDir)..\..\bin\$(var.Configuration)\System.Windows.Interactivity.dll" />
+      <File Id="Microsoft.Research.Wwt.Excel.Addin.dll.config" Name="Microsoft.Research.Wwt.Excel.Addin.dll.config" Source="$(var.ProjectDir)..\..\bin\$(var.Configuration)\Microsoft.Research.Wwt.Excel.Addin.dll.config" />
+      <File Id="EarthBasedPointDataSample.xlsx" Name="Earth Based Point Data Sample.xlsx" Source="$(var.ProjectDir)..\..\bin\$(var.Configuration)\Earth Based Point Data Sample.xlsx" />
+      <File Id="EarthBasedGeometryDataSample.xlsx" Name="Earth Based Geometry Data Sample.xlsx" Source="$(var.ProjectDir)..\..\bin\$(var.Configuration)\Earth Based Geometry Data Sample.xlsx" />
+      <File Id="AstronomyBasedGeometryDataSample.xlsx" Name="Astronomy Based Geometry Data Sample.xlsx" Source="$(var.ProjectDir)..\..\bin\$(var.Configuration)\Astronomy Based Geometry Data Sample.xlsx" />
+      <File Id="AstronomyBasedPointDataSample.xlsx" Name="Astronomy Based Point Data Sample.xlsx" Source="$(var.ProjectDir)..\..\bin\$(var.Configuration)\Astronomy Based Point Data Sample.xlsx" />
+      <File Id="FetchClimate.exe" Name="FetchClimate.exe" Source="$(var.ProjectDir)\Libs\FetchClimate.exe" />
+    </Component>
+
+    
+    <Component Id="WWTRegistryComponentForOffice12" Guid="{A9978D5B-85AB-4a9e-9447-43F7B164750C}">
+      <!--The registry entries should be made only if office 2007 is present.-->
+      <Condition><![CDATA[HASEXCEL2007]]></Condition>
+      <!--Registry Key for add-in entry under HKLM-->
+      <RegistryKey Root="HKLM" Key="Software\Microsoft\Office\Excel\Addins\$(var.ExcelAddinName)" Action="createAndRemoveOnUninstall">
+        <RegistryValue Type="string" Name="FriendlyName" Value="$(var.ExcelAddinFriendlyName)" />
+        <RegistryValue Type="string" Name="Description" Value="$(var.ExcelAddinDescription)" />
+        <RegistryValue Type="string" Name="Manifest" Value="[INSTALLDIR]$(var.ExcelAddinName).vsto|vstolocal" KeyPath="yes" />
+        <RegistryValue Type="integer" Name="LoadBehavior" Value="3" />
+      </RegistryKey>
+      <!--Registry Key for Plug-in entry for the installed office version-->
+      <RegistryKey Root="HKLM" Key="Software\Microsoft\[ProductName]" Action="createAndRemoveOnUninstall">
+        <RegistryValue Type="string" Name="OfficeVersion12" Value="1" />
+      </RegistryKey>
+    </Component>
+
+    <Component Id="WWTRegistryComponentForOffice14" Guid="{247507A3-A000-48d4-AEE6-873DD44B1567}">
+      <!--The registry entries should be made only if office 2010 is present.-->
+      <Condition><![CDATA[HASEXCEL2010]]></Condition>
+      <!--Registry Key for add-in entry under HKLM-->
+      <RegistryKey Root="HKLM" Key="Software\Microsoft\Office\Excel\Addins\$(var.ExcelAddinName)" Action="createAndRemoveOnUninstall">
+        <RegistryValue Type="string" Name="FriendlyName" Value="$(var.ExcelAddinFriendlyName)" />
+        <RegistryValue Type="string" Name="Description" Value="$(var.ExcelAddinDescription)" />
+        <RegistryValue Type="string" Name="Manifest" Value="[INSTALLDIR]$(var.ExcelAddinName).vsto|vstolocal" KeyPath="yes" />
+        <RegistryValue Type="integer" Name="LoadBehavior" Value="3" />
+      </RegistryKey>
+      <!--Registry Key for Plug-in entry for the installed office version-->
+      <RegistryKey Root="HKLM" Key="Software\Microsoft\[ProductName]" Action="createAndRemoveOnUninstall">
+        <RegistryValue Type="string" Name="OfficeVersion14" Value="1" />
+      </RegistryKey>
+    </Component>
+
+    <Component Id="Office2007Hotfix_EnableLocalMachineVSTO" Guid="{5D5F6CAB-6A97-4b6f-8B8C-C7F3D547B9E9}">
+      <!--The registry entries should be made only if office 2007 is present.-->
+      <Condition><![CDATA[HASEXCEL2007]]></Condition>
+      <!--Registry Key for add-in entry under HKLM-->
+      <RegistryKey Root="HKLM" Key="Software\Microsoft\Office\12.0\Common\General" Action="createAndRemoveOnUninstall">
+        <RegistryValue Type="integer" Name="EnableLocalMachineVSTO" Value="1" />
+      </RegistryKey>
+    </Component>
+  </DirectoryRef>
+</Include>

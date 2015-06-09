@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+  <String Id="LCID">1033</String>
+  <String Id="WWTAddinFeatureTitle">WorldWide Telescope Add-in for Excel</String>
+  <String Id="WWTAddinFeatureDesc">WorldWide Telescope Add-in for Excel Files</String>
+  <String Id="MsgMustRunPrivileged">Only members of the Administrator or Power User groups can install, repair, or remove [ProductName] from this computer.</String>
+  <String Id="MsgNewerVersionFoundError">A newer version of [ProductName] has already been installed on this computer. The installation will abort now.</String>
+
+  <!-- PreRequisiteMissingDialog -->
+  <String Id="PrerequisiteDeterminationDlg_Title">[ProductName] Setup</String>
+  <String Id="PrerequisiteDeterminationDlgTitle">{\WixUI_Font_Title}Prerequisites</String>
+  <String Id="PrerequisiteDeterminationDlgDescription">The prerequisite software required by [ProductName].</String>
+  <String Id="PrerequisiteDeterminationDlgText">The following software must be installed in order to use [ProductName]:</String>
+  <String Id="PrerequisiteDeterminationDlgItemInstalled">{\WixUI_Font_ItemIsInstalled}Installed</String>
+  <String Id="PrerequisiteDeterminationDlgItemNotInstalled">{\WixUI_Font_ItemIsNotInstalled}Not installed</String>
+  
+  <String Id="PrerequisitesMissingDlgTitle" Overridable="yes">Prerequisites Missing</String>
+  <String Id="PrerequisitesMissingDlgText" Overridable="yes">Setup cannot proceed. Please install the missing prerequisites and click Refresh</String>
+  
+  <!--Exit Dialog-->
+  <!--TODO: Edit strings appropriately-->
+  <String Id="LaunchHeaderText" Overridable="yes">Do you want to open a sample file containing instructions on how to use the Add-in? </String>
+  <String Id="LaunchEarthText" Overridable="yes">Yes, launch an Earth based point data sample</String>
+  <String Id="LaunchSkyText" Overridable="yes">Yes, launch an Astronomy based point data sample</String>
+  <String Id="LaunchNoneText" Overridable="yes">No</String>
+  <String Id="WWTExitDialogTitle" Overridable="yes">{\WixUI_Font_Bigger}[ProductName] Setup Wizard Completed</String>
+  <String Id="NoteText" Overridable="yes">{\WixUI_Font_DisplayMessage}Note:</String>
+  <String Id="CloseExcelText" Overridable="yes">Restart Microsoft Excel to view the latest version of WorldWide Telescope Add-in for Excel.</String> 
+  
+	<String Id="MaintenanceWelcomeDlgTitle" Overridable="yes">{\WixUI_Font_Bigger}Welcome to the [ProductName] Setup Wizard</String>
+	<String Id="PrepareDlgTitle" Overridable="yes">{\WixUI_Font_Bigger}Welcome to the [ProductName] Setup Wizard</String>
+
+  <String Id="NetFramework40Label">.NET Framework 4.0</String>
+  <String Id="ExcelLabel">Microsoft Excel 2007 / 2010 / 2013</String>
+  <String Id="VstoRuntimeLabel">VSTO Runtime 4.0</String>
+
+  <String Id="NetFramework40Link">http://msdn.microsoft.com/en-us/netframework/default.aspx</String>
+  <String Id="ExcelLink">http://office.microsoft.com/en-us/excel/default.aspx</String>
+  <String Id="VstoRuntimeLink">http://go.microsoft.com/fwlink/?LinkId=140384</String>
+  
+  <String Id="WixUIDownload">&amp;Download</String>
+  <String Id="WixUIDownload2">D&amp;ownload</String>
+  <String Id="WixUIDownload3">Do&amp;wnload</String>
+  <String Id="WixUIDownload4">Down&amp;load</String>
+  <String Id="WixUIContinueInstall">&amp;Install</String>
+  <String Id="WixUIRefresh">&amp;Refresh</String>
+  
+  <!-- TODO Help links (gets displayed in add/remove programs)-->
+  <String Id="ARPCOMMENTS">WorldWide Telescope Add-in for Excel</String>
+  <String Id="ARPHELPLINK">http://www.microsoft.com</String>
+  <String Id="ARPURLINFOABOUT">http://www.microsoft.com</String>
+  <String Id="FinishDialogCheckBoxText">Launch sample data file</String>
+  <!-- Icon to be displayed in Add/Remove Programs -->
+  <String Id="ARPPRODUCTICON">Installer.ico</String>
+  <String Id="WixUIInstall" Overridable="yes">&amp;Accept and Install</String>
+  <String Id="MaintenanceWelcomeDlgDescription" Overridable="yes">The Setup Wizard allows you to repair the [ProductName] features installed on your computer or to remove it from your computer. Click Next to continue or Cancel to exit the Setup Wizard.</String>
+
+  <String Id="WelcomeProgramText" Overridable="yes">This program collects information about features you use and stability issues. This information is sent to Microsoft to help us improve the Add-in. No information collected is used to identify or contact you.</String>
+</WixLocalization>

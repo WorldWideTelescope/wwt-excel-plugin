@@ -1,0 +1,142 @@
+﻿<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Class="Microsoft.Research.Wwt.Excel.Addin.CaptureViewpoint"
+    xmlns:ResourceString="clr-namespace:Microsoft.Research.Wwt.Excel.Addin.Properties" 
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
+    x:Name="Window"
+    Title="{x:Static ResourceString:Resources.CaptureViewpointText}"
+    WindowStartupLocation="CenterOwner" 
+    MinWidth="320" WindowStyle="ToolWindow" Width="320" MaxWidth="320" Background="{DynamicResource WindowbackgroundBrush}" VerticalAlignment="Top" MinHeight="395" Height="395" MaxHeight="375">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Resources/Style/Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <ResourceString:Resources x:Key="ResourceKeyStrings"></ResourceString:Resources>
+            <BooleanToVisibilityConverter x:Key="VisibilityConverter"></BooleanToVisibilityConverter>
+            <Style x:Key="getViewpointlableStyle" TargetType="{x:Type TextBlock}">
+                <Setter Property="TextWrapping" Value="NoWrap"/>
+                <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                <Setter Property="FontFamily" Value="Segoe UI"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="Foreground" Value="#FF002144"/>
+                <Setter Property="Margin" Value="10,2,10,2"/>
+                <Setter Property="MinWidth" Value="100"/>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+    
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ContentControl Content="/Microsoft.Research.Wwt.Excel.Addin;component/Resources/Images/CaptureViewpoint.png" Style="{DynamicResource WindowHeaderStyle}" Tag="{Binding Path=CaptureViewpointDescription, Source={StaticResource ResourceKeyStrings}}" IsTabStop="False" />
+        <StackPanel Grid.Row="1" Margin="12,12,12,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="18*"/>
+                    <ColumnDefinition Width="176*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock MinWidth="80" VerticalAlignment="Center" Text="Name" Style="{DynamicResource LabelTextblockStyle}"/>
+                <TextBox x:Name="viewpointName" Text="{Binding Path=Name, Mode=OneWay}" Grid.Column="1" Margin="10,0,0,0" BorderBrush="{DynamicResource TextboxBorderBrush}"  TextWrapping="NoWrap" AcceptsReturn="False" MaxLength="50" MaxLines="1" Grid.ColumnSpan="2">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="TextChanged">
+                            <i:InvokeCommandAction x:Name="PerspectiveNameTextChange" 
+                                                    Command="{Binding ViewpointNameTextChangeCommand}" 
+                                                    CommandParameter="{Binding Text,ElementName=viewpointName}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox> 
+            </Grid>
+            <TextBlock VerticalAlignment="Center" Text="{Binding Path=CaptureViewpointProperties, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource LabelTextblockStyle}" Margin="0,20,0,0"/>
+            <Border BorderThickness="1" Background="{DynamicResource WhitBrush}" Margin="0,5,0,0" BorderBrush="{DynamicResource LightgrayBorderBrush}" ClipToBounds="True" UseLayoutRounding="True">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock  Text="{Binding Path=CaptureViewpointLookAtLabel, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource getViewpointlableStyle}" />
+                        <Rectangle Width="1" Fill="#FFDADADA"/>
+                        <TextBlock  Text="{Binding CurrentPerspective.LookAt}" Style="{DynamicResource getViewpointlableStyle}" />
+                    </StackPanel>
+                    <Rectangle Height="1" Fill="{DynamicResource LightgrayBorderBrush}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock  Text="{Binding Path=CaptureViewpointFrameLabel, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource getViewpointlableStyle}" />
+                        <Rectangle Width="1" Fill="#FFDADADA"/>
+                        <TextBlock  Text="{Binding CurrentPerspective.ReferenceFrame}" Style="{DynamicResource getViewpointlableStyle}" />
+                    </StackPanel>
+                    <Rectangle Height="1" Fill="{DynamicResource LightgrayBorderBrush}"/>
+                    <StackPanel Orientation="Horizontal" Visibility="{Binding Path=IsNotSky,Converter={StaticResource VisibilityConverter}}">
+                        <TextBlock  Text="{Binding Path=CaptureViewpointLatitudeLabel, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource getViewpointlableStyle}" />
+                        <Rectangle Width="1" Fill="#FFDADADA"/>
+                        <TextBlock  Text="{Binding CurrentPerspective.Latitude}" Style="{DynamicResource getViewpointlableStyle}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Visibility="{Binding Path=IsSky,Converter={StaticResource VisibilityConverter}}">
+                        <TextBlock  Text="{Binding Path=CaptureViewpointRALabel, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource getViewpointlableStyle}" />
+                        <Rectangle Width="1" Fill="#FFDADADA"/>
+                        <TextBlock  Text="{Binding CurrentPerspective.RightAscention}" Style="{DynamicResource getViewpointlableStyle}" />
+                    </StackPanel>
+                    <Rectangle Height="1" Fill="{DynamicResource LightgrayBorderBrush}"/>
+                    <StackPanel Orientation="Horizontal" Visibility="{Binding Path=IsNotSky,Mode=TwoWay,Converter={StaticResource VisibilityConverter}}">
+                        <TextBlock  Text="{Binding Path=CaptureViewpointLongitudeLabel, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource getViewpointlableStyle}" />
+                        <Rectangle Width="1" Fill="{DynamicResource LightgrayBorderBrush}"/>
+                        <TextBlock  Text="{Binding CurrentPerspective.Longitude}" Style="{DynamicResource getViewpointlableStyle}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Visibility="{Binding Path=IsSky,Mode=TwoWay,Converter={StaticResource VisibilityConverter}}">
+                        <TextBlock  Text="{Binding Path=CaptureViewpointDecLabel, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource getViewpointlableStyle}" />
+                        <Rectangle Width="1" Fill="{DynamicResource LightgrayBorderBrush}"/>
+                        <TextBlock  Text="{Binding CurrentPerspective.Declination}" Style="{DynamicResource getViewpointlableStyle}" />
+                    </StackPanel>
+                    <Rectangle Height="1" Fill="{DynamicResource LightgrayBorderBrush}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock  Text="{Binding Path=CaptureViewpointZoomLabel, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource getViewpointlableStyle}" />
+                        <Rectangle Width="1" Fill="{DynamicResource LightgrayBorderBrush}"/>
+                        <TextBlock  Text="{Binding CurrentPerspective.ZoomText}" Style="{DynamicResource getViewpointlableStyle}" />
+                    </StackPanel>
+                    <Rectangle Height="1" Fill="{DynamicResource LightgrayBorderBrush}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock  Text="{Binding Path=CaptureViewpointRotationLabel, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource getViewpointlableStyle}" />
+                        <Rectangle Width="1" Fill="{DynamicResource LightgrayBorderBrush}"/>
+                        <TextBlock  Text="{Binding CurrentPerspective.Rotation}" Style="{DynamicResource getViewpointlableStyle}" />
+                    </StackPanel>
+                    <Rectangle Height="1" Fill="{DynamicResource LightgrayBorderBrush}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock  Text="{Binding Path=CaptureViewpointTiltLabel, Source={StaticResource ResourceKeyStrings}}"  Style="{DynamicResource getViewpointlableStyle}" />
+                        <Rectangle Width="1" Fill="{DynamicResource LightgrayBorderBrush}"/>
+                        <TextBlock  Text="{Binding CurrentPerspective.LookAngle}"  Style="{DynamicResource getViewpointlableStyle}" />
+                    </StackPanel>
+                    <Rectangle Height="1" Fill="{DynamicResource LightgrayBorderBrush}"/>
+                    <Rectangle Height="1" Fill="{DynamicResource LightgrayBorderBrush}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Path=CaptureViewpointTimeLabel, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource getViewpointlableStyle}" />
+                        <Rectangle Width="1" Fill="{DynamicResource LightgrayBorderBrush}"/>
+                        <TextBlock  Text="{Binding CurrentPerspective.ObservingTime}" Style="{DynamicResource getViewpointlableStyle}" />
+                    </StackPanel>
+                    <Rectangle Height="1" Fill="{DynamicResource LightgrayBorderBrush}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock  Text="{Binding Path=CaptureViewpointRateLabel, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource getViewpointlableStyle}" />
+                        <Rectangle Width="1" Fill="{DynamicResource LightgrayBorderBrush}"/>
+                        <TextBlock  Text="{Binding CurrentPerspective.TimeRate}" Style="{DynamicResource getViewpointlableStyle}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Right" Grid.Row="2" VerticalAlignment="Top" Orientation="Horizontal" Margin="{DynamicResource ButtonContainerMargin}">
+            <Button x:Name="okButton" Content="{Binding Path=OkLabel, Source={StaticResource ResourceKeyStrings}}" Width="75" IsEnabled="{Binding IsButtonEnabled}" IsDefault="True" IsCancel="False">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click" SourceName="okButton">
+                        <i:InvokeCommandAction x:Name="PerspectiveNameChange" 
+                                               Command="{Binding ViewpointNameChangeCommand}" 
+                                               CommandParameter="{Binding Text,ElementName=viewpointName}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+            <Button x:Name="cancelButton" Content="{Binding Path=CancelLabel, Source={StaticResource ResourceKeyStrings}}" Width="75" Margin="8,0,0,0" IsCancel="True">
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>

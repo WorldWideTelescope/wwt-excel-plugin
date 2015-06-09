@@ -1,0 +1,180 @@
+﻿<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Class="Microsoft.Research.Wwt.Excel.Addin.ManageViewpoint"
+    xmlns:ResourceString="clr-namespace:Microsoft.Research.Wwt.Excel.Addin.Properties" 
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
+    x:Name="Window"
+    WindowStartupLocation="CenterOwner" 
+    Title="{x:Static ResourceString:Resources.ManageViewpointText}"
+    WindowStyle="ToolWindow" Width="780" Height="480" Background="{DynamicResource WindowbackgroundBrush}" MinHeight="480" MinWidth="640">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Resources/Style/Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <ResourceString:Resources x:Key="ResourceKeyStrings"></ResourceString:Resources>
+            <Style x:Key="ManageDatagridCellStyle" TargetType="{x:Type DataGridCell}">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderBrush" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type DataGridCell}">
+                            <Border  x:Name="bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                <ContentPresenter  x:Name="content" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+                        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <SolidColorBrush x:Key="{x:Static DataGrid.FocusBorderBrushKey}" Color="#FF000000"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    
+    <Grid x:Name="LayoutRoot" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="352*" />
+            <ColumnDefinition Width="266*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ContentControl Content="/Microsoft.Research.Wwt.Excel.Addin;component/Resources/Images/ManageViewpoint.png" Style="{DynamicResource WindowHeaderStyle}" Tag="{Binding Path=ManageViewpointDescription, Source={StaticResource ResourceKeyStrings}}" Grid.ColumnSpan="2" IsTabStop="False" />
+        <DataGrid  x:Name="manageViewpoint" IsReadOnly="True" RowDetailsVisibilityMode="Collapsed" RowHeight="22"  Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding Path= AllViewpoint, Mode=TwoWay}" 
+                    HorizontalGridLinesBrush="{DynamicResource LightgrayBorderBrush}" VerticalGridLinesBrush="{DynamicResource LightgrayBorderBrush}" CellStyle="{DynamicResource ManageDatagridCellStyle}" 
+                    Margin="8,10" BorderBrush="{DynamicResource LightgrayBorderBrush}" RowHeaderWidth="0" Background="{DynamicResource WhitBrush}" Grid.ColumnSpan="2" CanUserAddRows="False" 
+                    CanUserDeleteRows="False" CanUserSortColumns="False" SelectionUnit="FullRow" SelectionMode="Single" VirtualizingStackPanel.IsVirtualizing="False">
+        <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Path= Name, UpdateSourceTrigger=PropertyChanged}" Header="{Binding Path=ManageViewpointNameHeader, Source={StaticResource ResourceKeyStrings}}" MinWidth="50"/>
+                <DataGridTextColumn Binding="{Binding CurrentPerspective.LookAt}" Header="{Binding Path=ManageViewpointLookAtHeader, Source={StaticResource ResourceKeyStrings}}"/>
+                <DataGridTextColumn Binding="{Binding CurrentPerspective.ReferenceFrame}" Header="{Binding Path=ManageViewpointFrameHeader, Source={StaticResource ResourceKeyStrings}}"/>
+                <DataGridTemplateColumn  Header="{Binding Path=ManageViewpointLatHeader, Source={StaticResource ResourceKeyStrings}}" MinWidth="50" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border x:Name="bd">
+                                <TextBlock x:Name="tb" Text="{Binding CurrentPerspective.Latitude}" />
+                            </Border>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding IsSky}" Value="True">
+                                    <!--<Setter Property="Background" Value="#FFF1F1F1" TargetName="bd"/>-->
+                                    <Setter Property="Opacity" TargetName="tb" Value="0"/>
+                                </DataTrigger> 
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn  Header="{Binding Path=ManageViewpointLongHeader, Source={StaticResource ResourceKeyStrings}}" MinWidth="50">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border x:Name="bd">
+                                <TextBlock Margin="2" x:Name="tb" Text="{Binding CurrentPerspective.Longitude}" />
+                            </Border>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding IsSky}" Value="True">
+                                    <!--<Setter Property="Background" Value="#FFF1F1F1" TargetName="bd"/>-->
+                                    <Setter Property="Opacity" TargetName="tb" Value="0"/>
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn  Header="{Binding Path=ManageViewpointRAHeader, Source={StaticResource ResourceKeyStrings}}" MinWidth="50">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border x:Name="bd">
+                                <TextBlock x:Name="tb" Text="{Binding CurrentPerspective.RightAscention}" />
+                            </Border>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding IsSky}" Value="False">
+                                    <!--<Setter Property="Background" Value="#FFF1F1F1" TargetName="bd"/>-->
+                                    <Setter Property="Opacity" TargetName="tb" Value="0"/>
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn  Header="{Binding Path=ManageViewpointDecHeader, Source={StaticResource ResourceKeyStrings}}" MinWidth="50">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border x:Name="bd">
+                                <TextBlock x:Name="tb" Text="{Binding CurrentPerspective.Declination}" />
+                            </Border>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding IsSky}" Value="False">
+                                    <!--<Setter Property="Background" Value="#FFF1F1F1" TargetName="bd"/>-->
+                                    <Setter Property="Opacity" TargetName="tb" Value="0"/>
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Binding="{Binding CurrentPerspective.ZoomText}" Header="{Binding Path=ManageViewpointZoomHeader, Source={StaticResource ResourceKeyStrings}}"/>
+                <DataGridTextColumn Binding="{Binding CurrentPerspective.Rotation}" Header="{Binding Path=ManageViewpointRotationHeader, Source={StaticResource ResourceKeyStrings}}"/>
+                <DataGridTextColumn Binding="{Binding CurrentPerspective.LookAngle}" Header="{Binding Path=ManageViewpointTiltHeader, Source={StaticResource ResourceKeyStrings}}"/>
+                <DataGridTextColumn Binding="{Binding CurrentPerspective.ObservingTime}" Header="{Binding Path=ManageViewpointObservingTimeHeader, Source={StaticResource ResourceKeyStrings}}"/>
+                <DataGridTextColumn Binding="{Binding CurrentPerspective.TimeRate}" Header="{Binding Path=ManageViewpointTimeRateHeader, Source={StaticResource ResourceKeyStrings}}"/>
+            </DataGrid.Columns>
+            <DataGrid.ItemContainerStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                    <Setter Property="KeyboardNavigation.IsTabStop" Value="True" />
+                </Style>
+            </DataGrid.ItemContainerStyle>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction x:Name="SelectionChanged" 
+                                                Command="{Binding SelectionChangedCommand}" 
+                                                CommandParameter="{Binding SelectedItem, ElementName=manageViewpoint}" />
+                </i:EventTrigger>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction x:Name="MouseDoubleClickAction" 
+                                                Command="{Binding GotoViewpointCommand}" 
+                                                CommandParameter="{Binding SelectedItem, ElementName=manageViewpoint}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </DataGrid>
+        <StackPanel HorizontalAlignment="Right" Grid.Row="2" VerticalAlignment="Top" Orientation="Horizontal" Margin="0,10,12,10" Grid.ColumnSpan="2">
+            <Button x:Name="renameViewpoint" Content="{Binding Path=ManageViewpointRenameLabel, Source={StaticResource ResourceKeyStrings}}" Width="75" IsEnabled="{Binding IsSelected}">
+                    <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click" SourceName="renameViewpoint">
+                    <i:InvokeCommandAction x:Name="RenameViewpoint" 
+                                                Command="{Binding RenameViewpointCommand}" 
+                                                CommandParameter="{Binding SelectedItem,ElementName=manageViewpoint}"/>
+                </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+            <Button x:Name="deleteViewpoint" Content="{Binding Path=ManageViewpointDeleteLabel, Source={StaticResource ResourceKeyStrings}}" Margin="8,0,0,0" Width="75" IsEnabled="{Binding IsSelected}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click" SourceName="deleteViewpoint">
+                        <i:InvokeCommandAction x:Name="DeleteViewpoint" 
+                                                Command="{Binding DeleteViewpointCommand}" 
+                                                CommandParameter="{Binding SelectedItem,ElementName=manageViewpoint}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+            <Button x:Name="gotoViewpoint" Content="{Binding Path=ManageViewpointGotoViewpointLabel, Source={StaticResource ResourceKeyStrings}}" Margin="8,0,0,0" Width="120" IsEnabled="{Binding IsSelected}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click" SourceName="gotoViewpoint">
+                        <i:InvokeCommandAction x:Name="GotoViewpoint" 
+                                                Command="{Binding GotoViewpointCommand}" 
+                                                CommandParameter="{Binding SelectedItem,ElementName=manageViewpoint}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+            <Button Content="{Binding Path=CancelLabel, Source={StaticResource ResourceKeyStrings}}" Width="75" Margin="8,0,0,0" IsCancel="True" />
+        </StackPanel>
+    </Grid>
+</Window>

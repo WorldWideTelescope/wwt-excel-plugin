@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--ChecksAndProperties.wxi includes the pre-requisite checks and properties that get set in launch conditions-->
+
+<Include xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+  <!--Install for all users-->
+  <Property Id="ALLUSERS">1</Property>
+
+  <!-- To allow all properties to be passed from the UI phase to execution phase in the installer-->
+  <Property Id="EnableUserControl">1</Property>
+
+  <!--LAUNCH CONDITIONS -->
+  <!--Admin required-->
+  <Condition Message="!(loc.MsgMustRunPrivileged)">
+    Privileged
+  </Condition>
+
+  <!-- .NET Framework check -->
+  <!-- Framework 4.0-->
+  <Property Id="NETFRAMEWORK40FULL">
+    <RegistrySearch Id="RegistrySearchNET40" Root="HKLM" Key="$(var.RootRegistryKey)\NET Framework Setup\NDP\v4\Full" Name="Install" Type="raw"></RegistrySearch>
+  </Property>
+
+  <!-- Excel check (2007/ 2010)-->
+
+  <!-- VSTO runtime check -->
+  <Property Id="VSTO40INSTALLED">
+    <RegistrySearch Id="RegistrySearchVSTO40" Root="HKLM" Key="SOFTWARE\Microsoft\VSTO Runtime Setup\v4R" Name="Version" Type="raw"/>
+  </Property>
+
+  <!-- Office (Excel) 2007 check -->
+  <Property Id="HASEXCEL2007">
+    <RegistrySearch Id="RegistrySearchOffice2007" Root="HKLM" Key="SOFTWARE\Microsoft\Office\12.0\Excel\InstallRoot" Name="Path" Type="raw" />
+  </Property>
+  
+  <!--  Office (EXCEL) 2010 check  -->
+  <Property Id="HASEXCEL2010">
+    HASEXCEL2010NEW OR HASEXCEL2013
+  </Property>
+
+  <!--  Office (EXCEL) 2010 x64 check  -->
+  <Property Id="HASEXCEL2010X64">
+    HASEXCEL2010X64NEW OR HASEXCEL2013X64
+  </Property>
+
+  <!--  Office (EXCEL) 2010 check  -->
+  <Property Id="HASEXCEL2010NEW">
+    <RegistrySearch Id="RegistrySearchOffice2010" Root="HKLM" Key="SOFTWARE\Microsoft\Office\14.0\Excel\InstallRoot" Name="Path" Type="raw" />
+  </Property>
+
+  <!--  Office (EXCEL) 2010 x64 check  -->
+  <Property Id="HASEXCEL2010X64NEW">
+    <RegistrySearch Id="RegistrySearchOffice2010x64" Root="HKLM" Key="SOFTWARE\Microsoft\Office\14.0\Excel\InstallRoot" Name="Path" Type="raw" Win64="yes" />
+  </Property>
+
+  <!--  Office (EXCEL) 2013 check  -->
+  <Property Id="HASEXCEL2013">
+    <RegistrySearch Id="RegistrySearchOffice2013" Root="HKLM" Key="SOFTWARE\Microsoft\Office\15.0\Excel\InstallRoot" Name="Path" Type="raw" />
+  </Property>
+
+  <!--  Office (EXCEL) 2013 x64 check  -->
+  <Property Id="HASEXCEL2013X64">
+    <RegistrySearch Id="RegistrySearchOffice2013x64" Root="HKLM" Key="SOFTWARE\Microsoft\Office\15.0\Excel\InstallRoot" Name="Path" Type="raw" Win64="yes" />
+  </Property>
+
+  <SetProperty Id="HASEXCEL" After="AppSearch" Value="1">
+    HASEXCEL2007 OR HASEXCEL2010 OR HASEXCEL2010X64
+  </SetProperty>
+  
+  <SetProperty Id="PREREQUISITEMISSING" After="AppSearch" Value="1">
+    (NOT NETFRAMEWORK40FULL) OR (NOT VSTO40INSTALLED) OR (NOT HASEXCEL)
+  </SetProperty>
+
+  <!--ADD\REMOVE PROGRAMS ENTRY PROPERTIES-->
+  <Property Id="ARPCOMMENTS">!(loc.ARPCOMMENTS)</Property>
+  <Property Id="ARPHELPLINK">!(loc.ARPHELPLINK)</Property>
+  <Property Id="ARPURLINFOABOUT">!(loc.ARPURLINFOABOUT)</Property>
+  <!-- Icon to be displayed in Add/Remove Programs -->
+  <Property Id="ARPPRODUCTICON">!(loc.ARPPRODUCTICON)</Property>
+  <Property Id="ARPNOMODIFY">1</Property>
+
+</Include>

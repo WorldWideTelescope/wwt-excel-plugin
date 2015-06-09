@@ -1,0 +1,132 @@
+﻿<Window x:Class="Microsoft.Research.Wwt.Excel.Addin.Stations"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        mc:Ignorable="d" 
+        Title="IRIS Demo"
+        d:DesignHeight="384" d:DesignWidth="300"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
+        xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing"
+        xmlns:local="clr-namespace:Microsoft.Research.Wwt.Excel.Addin" SizeToContent="WidthAndHeight">
+
+    <TabControl Margin="0,0,0,5" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Background="White" Padding="0" >
+        <TabItem Header="Station" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Height="25" >
+                <StackPanel Orientation="Vertical" Margin="4,14,4,4">
+                <StackPanel Orientation="Vertical" DataContext="{Binding Path=StationData, Mode=TwoWay}" Margin="4">
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Network:" />
+                <TextBox Width="200" Text="{Binding Path=Network}" Margin="10,0,50,0" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                <Label Content="Station:" />
+                <TextBox Width="200" Text="{Binding Path=Station}" Margin="17,0,10,0"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                <Label Content="Location:" />
+                <TextBox Width="200" Text="{Binding Path=Location}" Margin="10,0,0,0"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                <Label Content="Channel:" />
+                <TextBox Width="200" Text="{Binding Path=Channel}" Margin="11,0,0,0"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                <Label Content="Start Date:" />
+                <TextBox Width="200" Text="{Binding Path=StartDate}" Margin="2,0,0,0"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                <Label Content="End Date:" />
+                <TextBox Width="200" Text="{Binding Path=EndDate}" Margin="6,0,0,0" TextChanged="TextBox_TextChanged" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                <Label Content="Level:" />
+                <TextBox Width="200" Text="{Binding Path=Level}" Margin="26,0,0,0"/>
+            </StackPanel>
+        </StackPanel>
+                <StackPanel Margin="0,20,0,0">
+            <Button Name="saveButton" Content="Get Station Data" HorizontalAlignment="Center">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click" SourceName="saveButton">
+                        <i:InvokeCommandAction x:Name="SaveCommand" 
+                                                    Command="{Binding SaveCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button> 
+        </StackPanel>
+    </StackPanel>
+        </TabItem>
+        <TabItem Header="Earthquakes" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Height="25" >
+            <StackPanel Orientation="Vertical" Margin="4,14,4,4">
+                <StackPanel Orientation="Vertical" DataContext="{Binding Path=EarthquakeData, Mode=TwoWay}" Margin="4">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Display count:" />
+                        <ComboBox Height="22" Margin="20,0,0,0" x:Name="DisplayCombo" d:LayoutOverrides="Height"
+                                                  ItemsSource="{Binding DisplayCount}" SelectedItem="{Binding SelectedDisplayCount,Mode=TwoWay}">
+                            <!--<i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged" SourceName="DistanceUnitCombo">
+                                    <i:InvokeCommandAction x:Name="DistanceUnitCommand" Command="{Binding ControlCommand}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>-->
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=Value}"></TextBlock>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                        <Label Content="Priority:" />
+                        <ComboBox Height="22" Margin="52,0,0,0" x:Name="PriorityCombo" d:LayoutOverrides="Height"
+                                                  ItemsSource="{Binding Priority}" SelectedItem="{Binding SelectedPriority,Mode=TwoWay}">
+                            <!--<i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged" SourceName="DistanceUnitCombo">
+                                    <i:InvokeCommandAction x:Name="DistanceUnitCommand" Command="{Binding ControlCommand}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>-->
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=Value}"></TextBlock>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                        <Label Content="Earliest Date:" />
+                        <TextBox Width="150" Text="{Binding Path=StartDate}" Margin="25,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                        <Label Content="Latest Date:" />
+                        <TextBox Width="150" Text="{Binding Path=EndDate}" Margin="31,0,0,0" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                        <Label Content="Magnitude Min:" />
+                        <TextBox Width="150" Text="{Binding Path=MagnitudeMin}" Margin="12,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                        <Label Content="Magnitude Max:" />
+                        <TextBox Width="150" Text="{Binding Path=MagnitudeMax}" Margin="10,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                        <Label Content="Depth Min:" />
+                        <TextBox Width="150" Text="{Binding Path=DepthMin}" Margin="36,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                        <Label Content="Depth Max:" />
+                        <TextBox Width="150" Text="{Binding Path=DepthMax}" Margin="33,0,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Margin="0,20,0,0">
+                    <Button Name="getEarthquakeData" Content="Get Earthquake Data" HorizontalAlignment="Center">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click" SourceName="getEarthquakeData">
+                                <i:InvokeCommandAction x:Name="GetEarthquakeDataCommand" 
+                                                    Command="{Binding GetEarthquakeDataCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </TabItem>
+    </TabControl> 
+</Window>

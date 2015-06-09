@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <?include CommonDefines.wxi?>
+  <Product Id="$(var.ProductGuid)" Name="$(var.ProductName)" Language="!(loc.LCID)" Version="$(var.RTMVersionNumber)" Manufacturer="$(var.ProductManufacturer)" UpgradeCode="6c14b934-9662-448e-a974-c8aece60ef5b">
+    <Package Id="*" InstallPrivileges="elevated" InstallerVersion="200" Compressed="yes" />
+
+    <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
+
+    <!-- Include the Launch conditions, Core files -->
+    <?include ChecksAndProperties.wxi?>
+    <?include CoreFiles.wxi?>
+    <?include WWTUI.wxi?>
+
+    <!--Detect older and newer versions of the product for Upgrade support-->
+    <Upgrade Id="6c14b934-9662-448e-a974-c8aece60ef5b">
+      <UpgradeVersion Minimum="$(var.RTMVersionNumber)" IncludeMinimum="no" OnlyDetect="yes" Property="NEWVERSIONDETECTED"/>
+      <UpgradeVersion Maximum="$(var.RTMVersionNumber)" IncludeMaximum="no" MigrateFeatures="yes" Property="OLDERVERSIONDETECTED"/>
+    </Upgrade>
+
+    <!-- Icon reference-->
+    <Icon Id="Installer.ico" SourceFile="Bitmaps\installer.ico" />
+
+    <!-- Set Path for Excel -->
+    <Property Id="EXCELPATH">
+      <RegistrySearch Id="ExcelDirSearch" Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\excel.exe" Type="raw" />
+    </Property>
+    
+    <CustomAction Id="String_Replace" Return="check" Execute="immediate" BinaryKey='VSTOCustomAction' DllEntry='String_Replace' />    
+    <CustomAction Id="LaunchEarthFile" Property="EXCELPATH" Impersonate="yes" ExeCommand="&quot;[INSTALLDIR]Earth Based Point Data Sample.xlsx&quot;" Execute ="immediate" Return ="asyncNoWait"/>
+    <CustomAction Id="LaunchSkyFile" Property="EXCELPATH" Impersonate="yes" ExeCommand="&quot;[INSTALLDIR]Astronomy Based Point Data Sample.xlsx&quot;" Execute ="immediate" Return ="asyncNoWait"/>
+
+    <!-- Custom action binary reference -->
+    <Binary Id="VSTOCustomAction" SourceFile="$(var.ProjectDir)..\..\bin\$(var.Configuration)\Microsoft.Research.Wwt.Excel.Installer.CustomAction.CA.dll" />
+
+    <!-- Custom action for launching browser-->
+    <CustomAction Id="LaunchBrowser" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
+
+    <!-- Custom actions for registry entry -->
+    <CustomAction Id="RegistryEntries.Setup" Property="RegistryEntries" Value="HASEXCEL2007=[HASEXCEL2007];HASEXCEL2010=[HASEXCEL2010];HASEXCEL2010X64=[HASEXCEL2010X64];INSTALLDIR=[INSTALLDIR]" />
+    <CustomAction Id="RegistryEntries" BinaryKey="VSTOCustomAction" DllEntry="RegisterAddin" Execute="deferred" Impersonate="no" />
+
+    <CustomAction Id="RegistryEntriesUninstall.Setup" Property="RegistryEntriesUninstall" Value="HASEXCEL2007=[HASEXCEL2007];HASEXCEL2010=[HASEXCEL2010];HASEXCEL2010X64=[HASEXCEL2010X64];INSTALLDIR=[INSTALLDIR]" />
+    <CustomAction Id="RegistryEntriesUninstall" BinaryKey="VSTOCustomAction" DllEntry="UnregisterAddin" Execute="deferred" Impersonate="no" />
+
+    <!-- Sets the office version for registry entries -->
+    <CustomAction Id="SetOfficeVersion2007" Property="Office2007Version" Value="12.0" Execute="immediate" />
+    <CustomAction Id="SetOfficeVersion2010" Property="Office2010Version" Value="15.0" Execute="immediate" />
+
+    <!-- Custom action for refreshing the prerequisite installed state -->
+    <CustomAction Id="ValidatePrerequisites" BinaryKey ="VSTOCustomAction" DllEntry="ValidatePreRequisiteInstallationState" Execute="immediate" Impersonate="yes" />
+
+    <!-- Prevent downgrade -->
+    <CustomAction Id="PreventDowngrade" Error="!(loc.MsgNewerVersionFoundError)"/>
+
+    <!--FILES INSTALLATION DIRECTORY LAYOUT-->
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="$(var.ProgramFilesFolder)" Name="$(var.ProgramFilesFolderName)">
+        <Directory Id="MICROSOFTRESEARCHFOLDER" Name="$(var.MicrosoftResearchFolderName)">
+          <Directory Id="INSTALLDIR" Name="$(var.WWTInstallationFolder)">
+            <!-- Installing folder structure -->
+            <Directory Id="LicenseFolder" Name="$(var.LicenseFolderName)" />
+          </Directory>
+        </Directory>
+      </Directory>
+    </Directory>
+
+    <!--FEATURES DESCRIPTION-->
+    <Feature Id="WWTAddinFeature" Title="!(loc.WWTAddinFeatureTitle)" Description="!(loc.WWTAddinFeatureDesc)" Level="1" Absent="disallow" AllowAdvertise="no" InstallDefault="local" ConfigurableDirectory="INSTALLDIR">
+      <ComponentRef Id="LicenseStore" />
+      <ComponentRef Id="WWTAddinComponent"/>
+      <ComponentRef Id="WWTRegistryComponentForOffice12"/>
+      <ComponentRef Id="WWTRegistryComponentForOffice14"/>
+      <ComponentRef Id="Office2007Hotfix_EnableLocalMachineVSTO"/>
+    </Feature>
+
+    <WixVariable Id="WixUILicenseRtf" Value="EULA.rtf" />
+    <WixVariable Id="WixUIBannerBmp" Value="$(var.bannerBmp)"/>
+    <WixVariable Id="WixUIDialogBmp" Value="$(var.dialogBmp)"/>
+
+    <!-- UI References -->
+    <UIRef Id="WWTWixUI_Minimal" />
+
+    <InstallUISequence>
+      <!-- Prevent downgrade if a newer version is already installed -->
+      <Custom Action="PreventDowngrade" After="FindRelatedProducts">NEWVERSIONDETECTED</Custom>
+      <Custom Action="SetOfficeVersion2007" After="LaunchConditions"><![CDATA[HASEXCEL2007]]></Custom>
+      <Custom Action="SetOfficeVersion2010" After="SetOfficeVersion2007"><![CDATA[HASEXCEL2010 OR HASEXCEL2010X64]]></Custom>
+    </InstallUISequence>
+
+    <InstallExecuteSequence>
+
+      <!-- Set Office Version based on registry search -->
+      <Custom Action="SetOfficeVersion2007" After="LaunchConditions"><![CDATA[HASEXCEL2007]]></Custom>
+      <Custom Action="SetOfficeVersion2010" After="SetOfficeVersion2007"><![CDATA[HASEXCEL2010 OR HASEXCEL2010X64]]></Custom>
+
+      <!-- Registry entry while installing the add-in-->
+      <Custom Action="RegistryEntries.Setup" After="InstallFiles">1</Custom>
+      <Custom Action="RegistryEntries" After="RegistryEntries.Setup">NOT REMOVE</Custom>
+
+      <!--Registry entry while removing the add-in-->
+      <Custom Action="RegistryEntriesUninstall.Setup" Before="RemoveRegistryValues">1</Custom>
+      <Custom Action="RegistryEntriesUninstall" After="RegistryEntriesUninstall.Setup">REMOVE</Custom>
+
+      <!-- Prevent downgrade if a newer version is already installed -->
+      <Custom Action="PreventDowngrade" After="FindRelatedProducts">NEWVERSIONDETECTED</Custom>
+
+      <!-- Remove the previous older installation -->
+      <RemoveExistingProducts After="InstallInitialize" />
+    </InstallExecuteSequence>
+  </Product>
+</Wix>

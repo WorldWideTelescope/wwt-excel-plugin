@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include>
+  <UI>
+	<!-- Custom welcome dialog -->
+	<Dialog Id="WWTWelcomeEulaDlg" Width="370" Height="270" Title="!(loc.WelcomeEulaDlg_Title)">
+	  <Control Id="Bitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="234" TabSkip="no" Text="!(loc.WelcomeEulaDlgBitmap)" />
+	  <Control Id="Title" Type="Text" X="130" Y="6" Width="225" Height="30" Transparent="yes" NoPrefix="yes" Text="!(loc.WelcomeEulaDlgTitle)" />
+	  <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
+	  <Control Id="Print" Type="PushButton" X="90" Y="243" Width="56" Height="17" Text="!(loc.WixUIPrint)">
+		<Publish Event="DoAction" Value="WixUIPrintEula">1</Publish>
+	  </Control>
+	  <Control Id="Back" Type="PushButton" X="146" Y="243" Width="56" Height="17" Disabled="yes" Text="!(loc.WixUIBack)" />
+	  <Control Id="Install" Type="PushButton" ElevationShield="yes" X="202" Y="243" Width="90" Height="17" Default="yes" Text="!(loc.WixUIInstall)" Hidden="yes" Disabled="yes">
+		<Publish Event="SpawnWaitDialog" Value="WaitForCostingDlg">!(wix.WixUICostingPopupOptOut) OR CostingComplete = 1</Publish>
+		<Publish Event="EndDialog" Value="Return"><![CDATA[OutOfDiskSpace <> 1]]></Publish>
+		<Publish Event="SpawnDialog" Value="OutOfRbDiskDlg">OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 0 AND (PROMPTROLLBACKCOST="P" OR NOT PROMPTROLLBACKCOST)</Publish>
+		<Publish Event="EndDialog" Value="Return">OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 0 AND PROMPTROLLBACKCOST="D"</Publish>
+		<Publish Event="EnableRollback" Value="False">OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 0 AND PROMPTROLLBACKCOST="D"</Publish>
+		<Publish Event="SpawnDialog" Value="OutOfDiskDlg">(OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 1) OR (OutOfDiskSpace = 1 AND PROMPTROLLBACKCOST="F")</Publish>
+		<Condition Action="show">ALLUSERS AND (NOT PREREQUISITEMISSING)</Condition>
+		<Condition Action="enable">ALLUSERS AND (NOT PREREQUISITEMISSING)</Condition>
+	  </Control>
+	  <Control Id="InstallNoShield" Type="PushButton" ElevationShield="no" X="202" Y="243" Width="90" Height="17" Default="yes" Text="!(loc.WixUIInstall)" Hidden="yes" Disabled="yes">
+		<Publish Event="SpawnWaitDialog" Value="WaitForCostingDlg">!(wix.WixUICostingPopupOptOut) OR CostingComplete = 1</Publish>
+		<Publish Event="EndDialog" Value="Return"><![CDATA[OutOfDiskSpace <> 1]]></Publish>
+		<Publish Event="SpawnDialog" Value="OutOfRbDiskDlg">OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 0 AND (PROMPTROLLBACKCOST="P" OR NOT PROMPTROLLBACKCOST)</Publish>
+		<Publish Event="EndDialog" Value="Return">OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 0 AND PROMPTROLLBACKCOST="D"</Publish>
+		<Publish Event="EnableRollback" Value="False">OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 0 AND PROMPTROLLBACKCOST="D"</Publish>
+		<Publish Event="SpawnDialog" Value="OutOfDiskDlg">(OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 1) OR (OutOfDiskSpace = 1 AND PROMPTROLLBACKCOST="F")</Publish>
+		<Condition Action="show">(NOT ALLUSERS) AND (NOT PREREQUISITEMISSING)</Condition>
+		<Condition Action="enable">(NOT ALLUSERS) AND (NOT PREREQUISITEMISSING)</Condition>
+	  </Control>
+	  <!--If one or more prerequisites are missing-->
+	  <Control Id="PrerequisiteMissingInstall" Type="PushButton" ElevationShield="no" X="202" Y="243" Width="90" Height="17" Default="yes" Text="!(loc.WixUIInstall)" Hidden="yes" Disabled="yes">
+		<Publish Event="NewDialog" Value="PreRequisiteMissingDlgOne">1</Publish>
+		<Condition Action="show">PREREQUISITEMISSING</Condition>
+		<Condition Action="enable">PREREQUISITEMISSING</Condition>
+	  </Control>
+	  <Control Id="Cancel" Type="PushButton" X="302" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
+		<Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
+	  </Control>
+	  <Control Id="LicenseText" Type="ScrollableText" X="130" Y="36" Width="226" Height="152" Sunken="yes" TabSkip="no">
+		<Text SourceFile="!(wix.WixUILicenseRtf=$(var.licenseRtf))" />
+    </Control>
+    <Control Id="NewText" Type="Text" X="130" Y="190" Width="225" Height="50" Transparent="yes" NoPrefix="yes" Text="!(loc.WelcomeProgramText)" />
+  </Dialog>
+
+	<!-- Custom maintainence dialog -->
+	<Dialog Id="WWTMaintenanceTypeDlg" Width="370" Height="270" Title="!(loc.MaintenanceTypeDlg_Title)">      
+	  <Control Id="RepairButton" Type="PushButton" X="40" Y="68" Width="80" Height="17" ToolTip="!(loc.MaintenanceTypeDlgRepairButtonTooltip)" Text="!(loc.MaintenanceTypeDlgRepairButton)">
+		<Publish Property="WixUI_InstallMode" Value="Repair">1</Publish>
+		<Condition Action="disable">ARPNOREPAIR</Condition>
+	  </Control>
+	  <Control Id="RepairText" Type="Text" X="60" Y="98" Width="280" Height="30" Text="!(loc.MaintenanceTypeDlgRepairText)">
+		<Condition Action="hide">ARPNOREPAIR</Condition>
+	  </Control>
+	  <Control Id="RepairDisabledText" Type="Text" X="60" Y="98" Width="280" Height="30" NoPrefix="yes" Text="!(loc.MaintenanceTypeDlgRepairDisabledText)" Hidden="yes">
+		<Condition Action="show">ARPNOREPAIR</Condition>
+	  </Control>
+	  <Control Id="RemoveButton" Type="PushButton" X="40" Y="151" Width="80" Height="17" ToolTip="!(loc.MaintenanceTypeDlgRemoveButtonTooltip)" Text="!(loc.MaintenanceTypeDlgRemoveButton)">
+		<Publish Property="WixUI_InstallMode" Value="Remove">1</Publish>
+		<Condition Action="disable">ARPNOREMOVE</Condition>
+	  </Control>
+	  <Control Id="RemoveText" Type="Text" X="60" Y="171" Width="280" Height="20" NoPrefix="yes" Text="!(loc.MaintenanceTypeDlgRemoveText)">
+		<Condition Action="hide">ARPNOREMOVE</Condition>
+	  </Control>
+	  <Control Id="RemoveDisabledText" Type="Text" X="60" Y="171" Width="280" Height="20" NoPrefix="yes" Text="!(loc.MaintenanceTypeDlgRemoveDisabledText)" Hidden="yes">
+		<Condition Action="show">ARPNOREMOVE</Condition>
+	  </Control>
+	  <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="!(loc.WixUIBack)" />
+	  <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Disabled="yes" Text="!(loc.WixUINext)" />
+	  <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
+		<Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
+	  </Control>
+	  <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="!(loc.MaintenanceTypeDlgBannerBitmap)" />
+	  <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
+	  <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
+	  <Control Id="Title" Type="Text" X="15" Y="6" Width="340" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.MaintenanceTypeDlgTitle)" />
+	  <Control Id="Description" Type="Text" X="25" Y="23" Width="340" Height="20" Transparent="yes" NoPrefix="yes" Text="!(loc.MaintenanceTypeDlgDescription)" />
+	</Dialog>
+
+	<!-- PreRequisiteMissingDlg Dialog -->
+	<Dialog Id="PreRequisiteMissingDlgOne" Width="370" Height="270" Title="!(loc.PrerequisiteDeterminationDlg_Title)">
+	  <!-- Back Button -->
+	  <Control Id="Back" Type="PushButton" X="104" Y="243" Width="56" Height="17" Text="!(loc.WixUIBack)">
+		<Publish Event="NewDialog" Value="WWTWelcomeEulaDlg">1</Publish>
+	  </Control> 
+
+	  <!-- Refresh Button -->
+	  <Control Id="Refresh" Type="PushButton" X="170" Y="243" Width="56" Height="17" Cancel="no" Text="!(loc.WixUIRefresh)">
+		<Publish Event="DoAction" Value="ValidatePrerequisites" Order="1">1</Publish>
+		<Publish Event="NewDialog" Value="PreRequisiteMissingDlgTwo" Order="2">1</Publish>
+	  </Control>
+
+	  <Control Id="Install" Type="PushButton" ElevationShield="yes" X="236" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.WixUIContinueInstall)" Hidden="yes" Disabled="yes">
+		<Publish Event="SpawnWaitDialog" Value="WaitForCostingDlg">!(wix.WixUICostingPopupOptOut) OR CostingComplete = 1</Publish>
+		<Publish Event="EndDialog" Value="Return"><![CDATA[OutOfDiskSpace <> 1]]></Publish>
+		<Publish Event="SpawnDialog" Value="OutOfRbDiskDlg">OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 0 AND (PROMPTROLLBACKCOST="P" OR NOT PROMPTROLLBACKCOST)</Publish>
+		<Publish Event="EndDialog" Value="Return">OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 0 AND PROMPTROLLBACKCOST="D"</Publish>
+		<Publish Event="EnableRollback" Value="False">OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 0 AND PROMPTROLLBACKCOST="D"</Publish>
+		<Publish Event="SpawnDialog" Value="OutOfDiskDlg">(OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 1) OR (OutOfDiskSpace = 1 AND PROMPTROLLBACKCOST="F")</Publish>
+		<Condition Action="show">ALLUSERS</Condition>
+		<Condition Action="enable">ALLUSERS AND (NOT PREREQUISITEMISSING)</Condition>
+	  </Control>
+	  <Control Id="InstallNoShield" Type="PushButton" ElevationShield="no" X="236" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.WixUIContinueInstall)" Hidden="yes" Disabled="yes">
+		<Publish Event="SpawnWaitDialog" Value="WaitForCostingDlg">!(wix.WixUICostingPopupOptOut) OR CostingComplete = 1</Publish>
+		<Publish Event="EndDialog" Value="Return"><![CDATA[OutOfDiskSpace <> 1]]></Publish>
+		<Publish Event="SpawnDialog" Value="OutOfRbDiskDlg">OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 0 AND (PROMPTROLLBACKCOST="P" OR NOT PROMPTROLLBACKCOST)</Publish>
+		<Publish Event="EndDialog" Value="Return">OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 0 AND PROMPTROLLBACKCOST="D"</Publish>
+		<Publish Event="EnableRollback" Value="False">OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 0 AND PROMPTROLLBACKCOST="D"</Publish>
+		<Publish Event="SpawnDialog" Value="OutOfDiskDlg">(OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 1) OR (OutOfDiskSpace = 1 AND PROMPTROLLBACKCOST="F")</Publish>
+		<Condition Action="show">NOT ALLUSERS</Condition>
+		<Condition Action="enable">(NOT ALLUSERS) AND (NOT PREREQUISITEMISSING)</Condition>
+	  </Control>
+
+	  <Control Id="Cancel" Type="PushButton" X="302" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
+		<Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
+	  </Control>
+	  <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="!(loc.MaintenanceTypeDlgBannerBitmap)" />
+
+	  <!--Prerequisite names-->
+	  <Control Id="NetFrameworkDescription" Type="Text" X="25" Y="87" Width="135" Height="10" Text="!(loc.NetFramework40Label)"/>
+	  <Control Id="ExcelDescription" Type="Text" X="25" Y="117" Width="135" Height="10" Text="!(loc.ExcelLabel)"/>
+	  <Control Id="VstoRuntime" Type="Text" X="25" Y="147" Width="135" Height="10" Text="!(loc.VstoRuntimeLabel)"/>
+
+	  <!--Prerequisite status-->
+	  <!--.NET Framework 4.0-->
+	  <Control Id="NetFrameworkInstalled" Type="Text" X="175" Y="85" Width="60" Height="20"
+			   Text="!(loc.PrerequisiteDeterminationDlgItemInstalled)" Hidden="yes">
+		<Condition Action="show">NETFRAMEWORK40FULL</Condition>
+	  </Control>
+	  <Control Id="NetFrameworkMissing" Type="Text" X="175" Y="85" Width="60" Height="20"
+			   Text="!(loc.PrerequisiteDeterminationDlgItemNotInstalled)" Hidden="yes">
+		<Condition Action="show">NOT NETFRAMEWORK40FULL</Condition>
+	  </Control>
+
+	  <!--Excel-->
+	  <Control Id="ExcelInstalled" Type="Text" X="175" Y="115" Width="60" Height="20"
+	  Text="!(loc.PrerequisiteDeterminationDlgItemInstalled)" Hidden="yes">
+		<Condition Action="show">HASEXCEL</Condition>
+	  </Control>
+	  <Control Id="ExcelMissing" Type="Text" X="175" Y="115" Width="60" Height="20"
+			   Text="!(loc.PrerequisiteDeterminationDlgItemNotInstalled)" Hidden="yes">
+		<Condition Action="show">NOT HASEXCEL</Condition>
+	  </Control>
+
+	  <!--VSTO Runtime-->
+	  <Control Id="VstoRuntimeInstalled" Type="Text" X="175" Y="145" Width="60" Height="20"
+	  Text="!(loc.PrerequisiteDeterminationDlgItemInstalled)" Hidden="yes">
+		<Condition Action="show">VSTO40INSTALLED</Condition>
+	  </Control>
+	  <Control Id="VstoRuntimeMissing" Type="Text" X="175" Y="145" Width="60" Height="20"
+			   Text="!(loc.PrerequisiteDeterminationDlgItemNotInstalled)" Hidden="yes">
+		<Condition Action="show">NOT VSTO40INSTALLED</Condition>
+	  </Control>
+	  <!--Prerequisite status end-->
+
+	  <!--Prerequisite download links-->
+	  <!--.NET Framework 4.0-->
+	  <Control Id="NetFrameworkDownloadLink" Type="PushButton" X="250" Y="83" Width="70" Height="20" Hidden="yes" Text="!(loc.WixUIDownload)">
+		<Publish Property="WixShellExecTarget" Value="!(loc.NetFramework40Link)">1</Publish>
+		<Publish Event="DoAction" Value="LaunchBrowser">1</Publish>
+		<Condition Action="show">NOT NETFRAMEWORK40FULL</Condition>
+	  </Control>
+
+	  <!--Excel-->
+	  <Control Id="ExcelDownloadLink" Type="PushButton" X="250" Y="113" Width="70" Height="20" Hidden="yes" Text="!(loc.WixUIDownload2)">
+		<Publish Property="WixShellExecTarget" Value="!(loc.ExcelLink)">1</Publish>
+		<Publish Event="DoAction" Value="LaunchBrowser">1</Publish>
+		<Condition Action="show">NOT HASEXCEL</Condition>
+	  </Control>
+
+	  <!--VSTO Runtime-->
+	  <Control Id="VSTORuntimeDownloadLink" Type="PushButton" X="250" Y="143" Width="70" Height="20" Hidden="yes" Text="!(loc.WixUIDownload3)">
+		<Publish Property="WixShellExecTarget" Value="!(loc.VstoRuntimeLink)">1</Publish>
+		<Publish Event="DoAction" Value="LaunchBrowser">1</Publish>
+		<Condition Action="show">NOT VSTO40INSTALLED</Condition>
+	  </Control>
+	  <!--Prerequisite download links end-->
+
+	  <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
+	  <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
+	  <Control Id="Description" Type="Text" X="15" Y="23" Width="300" Height="55" Transparent="yes"
+			   NoPrefix="yes" Text="!(loc.PrerequisiteDeterminationDlgDescription)"/>
+	  <Control Id="Title" Type="Text" X="15" Y="7" Width="300" Height="55" Transparent="yes"
+				 NoPrefix="yes" Text="!(loc.PrerequisiteDeterminationDlgTitle)"/>
+	  <Control Id="Text" Type="Text" X="15" Y="55" Width="300" Height="55" Transparent="yes"
+			  NoPrefix="yes" Text="!(loc.PrerequisiteDeterminationDlgText)"/>
+
+	  <!--Prerequisites missing error message-->
+	  <Control Id="Icon" Type="Icon" X="15" Y="195" Width="32" Height="32"
+				 FixedSize="yes" IconSize="32" Text="WixUI_Ico_Info" Hidden="yes">
+		<Condition Action="show">PREREQUISITEMISSING</Condition>
+	  </Control>
+	  <Control Id="Message" Type="Text" X="55" Y="200" Width="300" Height="32" TabSkip="no"
+				 Text="!(loc.PrerequisitesMissingDlgText)" Hidden="yes">
+		<Condition Action="show">PREREQUISITEMISSING</Condition>
+	  </Control>
+
+	</Dialog>
+
+	<Dialog Id="PreRequisiteMissingDlgTwo" Width="370" Height="270" Title="!(loc.PrerequisiteDeterminationDlg_Title)">
+	  <!-- Back Button -->
+	  <Control Id="Back" Type="PushButton" X="104" Y="243" Width="56" Height="17" Text="!(loc.WixUIBack)">
+		<Publish Event="NewDialog" Value="WWTWelcomeEulaDlg">1</Publish>
+	  </Control>
+
+	  <Control Id="Refresh" Type="PushButton" X="170" Y="243" Width="56" Height="17" Cancel="no" Text="!(loc.WixUIRefresh)">
+		<Publish Event="DoAction" Value="ValidatePrerequisites" Order="1">1</Publish>
+		<Publish Event="NewDialog" Value="PreRequisiteMissingDlgOne" Order="2">1</Publish>
+	  </Control>
+
+	  <Control Id="Install" Type="PushButton" ElevationShield="yes" X="236" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.WixUIContinueInstall)" Hidden="yes" Disabled="yes">
+		<Publish Event="SpawnWaitDialog" Value="WaitForCostingDlg">!(wix.WixUICostingPopupOptOut) OR CostingComplete = 1</Publish>
+		<Publish Event="EndDialog" Value="Return"><![CDATA[OutOfDiskSpace <> 1]]></Publish>
+		<Publish Event="SpawnDialog" Value="OutOfRbDiskDlg">OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 0 AND (PROMPTROLLBACKCOST="P" OR NOT PROMPTROLLBACKCOST)</Publish>
+		<Publish Event="EndDialog" Value="Return">OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 0 AND PROMPTROLLBACKCOST="D"</Publish>
+		<Publish Event="EnableRollback" Value="False">OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 0 AND PROMPTROLLBACKCOST="D"</Publish>
+		<Publish Event="SpawnDialog" Value="OutOfDiskDlg">(OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 1) OR (OutOfDiskSpace = 1 AND PROMPTROLLBACKCOST="F")</Publish>
+		<Condition Action="show">ALLUSERS</Condition>
+		<Condition Action="enable">ALLUSERS AND (NOT PREREQUISITEMISSING)</Condition>
+	  </Control>
+	  <Control Id="InstallNoShield" Type="PushButton" ElevationShield="no" X="236" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.WixUIContinueInstall)" Hidden="yes" Disabled="yes">
+		<Publish Event="SpawnWaitDialog" Value="WaitForCostingDlg">!(wix.WixUICostingPopupOptOut) OR CostingComplete = 1</Publish>
+		<Publish Event="EndDialog" Value="Return"><![CDATA[OutOfDiskSpace <> 1]]></Publish>
+		<Publish Event="SpawnDialog" Value="OutOfRbDiskDlg">OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 0 AND (PROMPTROLLBACKCOST="P" OR NOT PROMPTROLLBACKCOST)</Publish>
+		<Publish Event="EndDialog" Value="Return">OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 0 AND PROMPTROLLBACKCOST="D"</Publish>
+		<Publish Event="EnableRollback" Value="False">OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 0 AND PROMPTROLLBACKCOST="D"</Publish>
+		<Publish Event="SpawnDialog" Value="OutOfDiskDlg">(OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 1) OR (OutOfDiskSpace = 1 AND PROMPTROLLBACKCOST="F")</Publish>
+		<Condition Action="show">NOT ALLUSERS</Condition>
+		<Condition Action="enable">(NOT ALLUSERS) AND (NOT PREREQUISITEMISSING)</Condition>
+	  </Control>
+
+	  <Control Id="Cancel" Type="PushButton" X="302" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
+		<Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
+	  </Control>
+	  <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="!(loc.MaintenanceTypeDlgBannerBitmap)" />
+
+	  <!--Prerequisite names-->
+	  <Control Id="NetFrameworkDescription" Type="Text" X="25" Y="87" Width="100" Height="10" Text="!(loc.NetFramework40Label)"/>
+	  <Control Id="ExcelDescription" Type="Text" X="25" Y="117" Width="100" Height="10" Text="!(loc.ExcelLabel)"/>
+	  <Control Id="VstoRuntime" Type="Text" X="25" Y="147" Width="100" Height="10" Text="!(loc.VstoRuntimeLabel)"/>
+
+	  <!--Prerequisite status-->
+	  <!--.NET Framework 4.0-->
+	  <Control Id="NetFrameworkInstalled" Type="Text" X="150" Y="85" Width="60" Height="20"
+			   Text="!(loc.PrerequisiteDeterminationDlgItemInstalled)" Hidden="yes">
+		<Condition Action="show">NETFRAMEWORK40FULL</Condition>
+	  </Control>
+	  <Control Id="NetFrameworkMissing" Type="Text" X="150" Y="85" Width="60" Height="20"
+			   Text="!(loc.PrerequisiteDeterminationDlgItemNotInstalled)" Hidden="yes">
+		<Condition Action="show">NOT NETFRAMEWORK40FULL</Condition>
+	  </Control>
+
+	  <!--Excel-->
+	  <Control Id="ExcelInstalled" Type="Text" X="150" Y="115" Width="60" Height="20"
+	  Text="!(loc.PrerequisiteDeterminationDlgItemInstalled)" Hidden="yes">
+		<Condition Action="show">HASEXCEL</Condition>
+	  </Control>
+	  <Control Id="ExcelMissing" Type="Text" X="150" Y="115" Width="60" Height="20"
+			   Text="!(loc.PrerequisiteDeterminationDlgItemNotInstalled)" Hidden="yes">
+		<Condition Action="show">NOT HASEXCEL</Condition>
+	  </Control>
+
+	  <!--VSTO Runtime-->
+	  <Control Id="VstoRuntimeInstalled" Type="Text" X="150" Y="145" Width="60" Height="20"
+	  Text="!(loc.PrerequisiteDeterminationDlgItemInstalled)" Hidden="yes">
+		<Condition Action="show">VSTO40INSTALLED</Condition>
+	  </Control>
+	  <Control Id="VstoRuntimeMissing" Type="Text" X="150" Y="145" Width="60" Height="20"
+			   Text="!(loc.PrerequisiteDeterminationDlgItemNotInstalled)" Hidden="yes">
+		<Condition Action="show">NOT VSTO40INSTALLED</Condition>
+	  </Control>
+	  <!--Prerequisite status end-->
+
+	  <!--Prerequisite download links-->
+	  <!--.NET Framework 4.0-->
+	  <Control Id="NetFrameworkDownloadLink" Type="PushButton" X="250" Y="83" Width="70" Height="20" Hidden="yes" Text="!(loc.WixUIDownload)">
+		<Publish Property="WixShellExecTarget" Value="!(loc.NetFramework40Link)">1</Publish>
+		<Publish Event="DoAction" Value="LaunchBrowser">1</Publish>
+		<Condition Action="show">NOT NETFRAMEWORK40FULL</Condition>
+	  </Control>
+
+	  <!--Excel-->
+	  <Control Id="ExcelDownloadLink" Type="PushButton" X="250" Y="113" Width="70" Height="20" Hidden="yes" Text="!(loc.WixUIDownload2)">
+		<Publish Property="WixShellExecTarget" Value="!(loc.ExcelLink)">1</Publish>
+		<Publish Event="DoAction" Value="LaunchBrowser">1</Publish>
+		<Condition Action="show">NOT HASEXCEL</Condition>
+	  </Control>
+
+	  <!--VSTO Runtime-->
+	  <Control Id="VSTORuntimeDownloadLink" Type="PushButton" X="250" Y="143" Width="70" Height="20" Hidden="yes" Text="!(loc.WixUIDownload3)">
+		<Publish Property="WixShellExecTarget" Value="!(loc.VstoRuntimeLink)">1</Publish>
+		<Publish Event="DoAction" Value="LaunchBrowser">1</Publish>
+		<Condition Action="show">NOT VSTO40INSTALLED</Condition>
+	  </Control>
+	  <!--Prerequisite download links end-->
+
+	  <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
+	  <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
+	  <Control Id="Description" Type="Text" X="15" Y="23" Width="300" Height="55" Transparent="yes"
+			   NoPrefix="yes" Text="!(loc.PrerequisiteDeterminationDlgDescription)"/>
+	  <Control Id="Title" Type="Text" X="15" Y="7" Width="300" Height="55" Transparent="yes"
+				 NoPrefix="yes" Text="!(loc.PrerequisiteDeterminationDlgTitle)"/>
+	  <Control Id="Text" Type="Text" X="15" Y="55" Width="300" Height="55" Transparent="yes"
+			  NoPrefix="yes" Text="!(loc.PrerequisiteDeterminationDlgText)"/>
+
+	  <!--Prerequisites missing error message-->
+	  <Control Id="Icon" Type="Icon" X="15" Y="195" Width="32" Height="32"
+				 FixedSize="yes" IconSize="32" Text="WixUI_Ico_Info" Hidden="yes">
+		<Condition Action="show">PREREQUISITEMISSING</Condition>
+	  </Control>
+	  <Control Id="Message" Type="Text" X="55" Y="200" Width="300" Height="32" TabSkip="no"
+				 Text="!(loc.PrerequisitesMissingDlgText)" Hidden="yes">
+		<Condition Action="show">PREREQUISITEMISSING</Condition>
+	  </Control>
+
+	</Dialog>
+	
+	<!--Exit Dialog-->
+	<Dialog Id="WWTExitDialog" Width="370" Height="270" Title="!(loc.ExitDialog_Title)">
+	  <Control Id="Finish" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Cancel="yes" Text="!(loc.WixUIFinish)" />
+	  <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Disabled="yes" Text="!(loc.WixUICancel)" />
+	  <Control Id="Bitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="234" TabSkip="no" Text="!(loc.ExitDialogBitmap)" />
+	  <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Disabled="yes" Text="!(loc.WixUIBack)" />
+	  <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
+	  <Control Id="Description" Type="Text" X="131" Y="70" Width="220" Height="40" Transparent="yes" NoPrefix="yes" Text="!(loc.ExitDialogDescription)" />
+	  <Control Id="Title" Type="Text" X="131" Y="20" Width="220" Height="60" Transparent="yes" NoPrefix="yes" Text="!(loc.WWTExitDialogTitle)" />
+    <Control Id="NoteTextHeader" Type="Text" Hidden="yes" X="130" Y="91" Width="26" Height="55" Transparent="yes" NoPrefix="yes" Text="!(loc.NoteText)" >
+      <Condition Action="show">NOT WixUI_InstallMode="Remove"</Condition>
+    </Control>
+    <Control Id="CloseExcelHeader" Type="Text" Hidden="yes" X="158" Y="93" Width="220" Height="55" Transparent="yes" NoPrefix="yes" Text="!(loc.CloseExcelText)" >
+      <Condition Action="show">NOT WixUI_InstallMode="Remove"</Condition>
+    </Control>
+    <Control Id="LaunchSampleHeader" Type="Text" Hidden="yes" X="131" Y="145" Width="220" Height="60" Transparent="yes" NoPrefix="yes" Text="!(loc.LaunchHeaderText)" >
+      <Condition Action="show">NOT Installed</Condition>
+	  </Control>
+	  <Control Id="ChooseLaunchSample" Type="RadioButtonGroup" Property="LaunchSample" X="131" Y="165" Width="220" Height="60" Hidden="yes" >
+		<RadioButtonGroup Property="LaunchSample" >
+		  <RadioButton Value="LaunchEarth" X="0" Y="5" Width="200" Height="20" Text="!(loc.LaunchEarthText)" />
+		  <RadioButton Value="LaunchSky" X="0" Y="20" Width="200" Height="20" Text="!(loc.LaunchSkyText)" />
+		  <RadioButton Value="LaunchNone" X="0" Y="35" Width="200" Height="20" Text="!(loc.LaunchNoneText)" />
+		</RadioButtonGroup>
+		<Condition Action="show">NOT Installed</Condition>
+	  </Control>
+	</Dialog>
+	
+	<TextStyle Id="WixUI_Font_ItemIsInstalled" FaceName="Segoe UI" Size="9" Bold="no" Red="23" Green="121" Blue="53"/>
+	<Property Id="PrerequisiteInstalledFont" Value="WixUI_Font_ItemIsInstalled" />
+
+	<TextStyle Id="WixUI_Font_ItemIsNotInstalled" FaceName="Segoe UI" Size="9" Bold="no" Red="237" Green="28" Blue="36"/>
+	<Property Id="PrerequisiteNotInstalledFont" Value="WixUI_Font_ItemIsNotInstalled" />
+
+  <TextStyle Id="WixUI_Font_DisplayMessage" FaceName="Segoe UI" Size="10" Bold="yes" Red="0" Green="0" Blue="0"/>
+  <Property Id="DisplayMessageFont" Value="WixUI_Font_DisplayMessage" />
+
+  </UI>
+
+  <!-- Custom wix UI flow -->
+  <UI Id="WWTWixUI_Minimal">
+	<TextStyle Id="WixUI_Font_Normal" FaceName="Tahoma" Size="8" />
+	<TextStyle Id="WixUI_Font_Bigger" FaceName="Tahoma" Size="12" />
+	<TextStyle Id="WixUI_Font_Title" FaceName="Tahoma" Size="9" Bold="yes" />
+	<TextStyle Id="WixUI_Font_Link" FaceName="Microsoft Sans Serif" Size="8" Underline="yes" Red="81" Green="54" Blue="244" />
+	
+	<Property Id="DefaultUIFont" Value="WixUI_Font_Normal" />
+	<Property Id="WixUI_Mode" Value="Minimal" />
+
+	<DialogRef Id="ErrorDlg" />
+	<DialogRef Id="FatalError" />
+	<DialogRef Id="FilesInUse" />
+	<DialogRef Id="MsiRMFilesInUse" />
+	<DialogRef Id="PrepareDlg" />
+	<DialogRef Id="ProgressDlg" />
+	<DialogRef Id="ResumeDlg" />
+	<DialogRef Id="UserExit" />
+	<DialogRef Id="WelcomeDlg" />
+	<DialogRef Id="WWTWelcomeEulaDlg" />
+	<DialogRef Id="WWTMaintenanceTypeDlg"/>
+	<DialogRef Id="PreRequisiteMissingDlgOne" />
+	
+	<Publish Dialog="WWTExitDialog" Control="Finish" Event="EndDialog" Value="Return" Order="999">1</Publish>
+
+	<Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="WWTMaintenanceTypeDlg">1</Publish>
+
+	<Publish Dialog="MaintenanceWelcomeDlg" Control="Next" Event="NewDialog" Value="WWTMaintenanceTypeDlg">1</Publish>
+
+	<Publish Dialog="WWTMaintenanceTypeDlg" Control="RepairButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+	<Publish Dialog="WWTMaintenanceTypeDlg" Control="RemoveButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+	<Publish Dialog="WWTMaintenanceTypeDlg" Control="Back" Event="NewDialog" Value="MaintenanceWelcomeDlg">1</Publish>
+
+	<Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">Installed AND PATCH</Publish>
+	<Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="2">Installed AND PATCH</Publish>
+
+	<!-- Launch the sample workbook after installation -->
+    <Publish Dialog="WWTExitDialog" Control="Finish" Order="1" Event="DoAction" Value="String_Replace">1</Publish>
+    <Publish Dialog="WWTExitDialog" Control="Finish" Order="3" Event="DoAction" Value="LaunchEarthFile">LaunchSample = "LaunchEarth" AND NOT Installed</Publish>
+    <Publish Dialog="WWTExitDialog" Control="Finish" Order="2" Event="DoAction" Value="LaunchSkyFile">LaunchSample = "LaunchSky" AND NOT Installed</Publish>
+
+	<InstallUISequence>
+	  <Show Dialog="WelcomeDlg" Before="WWTWelcomeEulaDlg">Installed AND PATCH</Show>
+	  <Show Dialog="WWTWelcomeEulaDlg" Before="ProgressDlg">NOT Installed</Show>
+	  <Show Dialog="WWTExitDialog" OnExit="success" Overridable="yes" />
+	</InstallUISequence>
+
+	<AdminUISequence>
+	  <Show Dialog="WWTExitDialog" OnExit="success" Overridable="yes" />
+	</AdminUISequence>
+  </UI>
+
+  <Property Id="LaunchSample" Value="LaunchEarth"/>
+
+  <UIRef Id="WixUI_Common" />
+  <UIRef Id="WixUI_ErrorProgressText" />
+</Include>

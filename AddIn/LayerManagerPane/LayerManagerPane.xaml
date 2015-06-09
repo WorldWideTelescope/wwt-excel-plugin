@@ -1,0 +1,1588 @@
+﻿<UserControl x:Class="Microsoft.Research.Wwt.Excel.Addin.LayerManagerPane"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+            xmlns:Microsoft_Windows_Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" 
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+            xmlns:local="clr-namespace:Microsoft.Research.Wwt.Excel.Addin"
+             xmlns:common="clr-namespace:Microsoft.Research.Wwt.Excel.Common;assembly=Microsoft.Research.Wwt.Excel.Common"
+             xmlns:ResourceString="clr-namespace:Microsoft.Research.Wwt.Excel.Addin.Properties" 
+            xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+            xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
+            xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing"
+             mc:Ignorable="d"  FontFamily="Segoe UI"
+             Background="#FFDEECFC" MaxWidth="400" MinWidth="305" MinHeight="400">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Resources/Style/Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <!-- Converter-->
+            <local:TickConverter x:Key="TickConverter"></local:TickConverter>
+            <BooleanToVisibilityConverter x:Key="VisibilityConverter"></BooleanToVisibilityConverter>
+            <ResourceString:Resources x:Key="ResourceKeyStrings"></ResourceString:Resources>
+            <!-- Group comboBox-->
+            <CollectionViewSource Source="{Binding Layers,IsAsync=False}" x:Key="LayerView">
+                <CollectionViewSource.GroupDescriptions>
+                    <PropertyGroupDescription PropertyName="LayerName"/>
+                </CollectionViewSource.GroupDescriptions>
+            </CollectionViewSource>
+
+            <Style x:Key="OpacitySliderStyle" TargetType="{x:Type Slider}">
+                <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="#FFC4C4C4"/>
+                <Setter Property="BorderBrush" Value="#FFcccccc"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="MinHeight" Value="4"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Slider}">
+                            <Grid>
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="ToolTipShowStates">
+                                        <VisualState x:Name="ShowTooltip">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="canvas">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="canvas">
+                                                    <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
+                                                </DoubleAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="HideTooltip">
+                                            <Storyboard>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="canvas">
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+                                                </DoubleAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="canvas">
+                                                    <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Collapsed}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <TickBar x:Name="BottomTick" Fill="{TemplateBinding Foreground}" Height="4" Placement="Bottom" Grid.Row="2" Visibility="Collapsed" VerticalAlignment="Bottom" Margin="0,0,0,-10"/>
+                                <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="False">
+                                    <Grid Margin="1,0">
+                                        <Canvas x:Name="canvas" Height="6" Margin="-9,-18,0,0" VerticalAlignment="Top" Width="Auto" Visibility="Collapsed">
+                                            <Grid Height="Auto" Width="20" Canvas.Left="{Binding ActualWidth, ElementName=fillRectangle}">
+                                                <Path Data="M3.0149999,-1.2447967 L6.0299999,3.2526004 1.978878E-09,3.2526004 z" Fill="#CC27A2D5" Height="5.996" Margin="0,0,0,-6.319" RenderTransformOrigin="0.500000021977607,0.5" Stretch="Fill" Stroke="{x:Null}" StrokeThickness="0" VerticalAlignment="Bottom" Width="Auto">
+                                                    <Path.RenderTransform>
+                                                        <TransformGroup>
+                                                            <ScaleTransform/>
+                                                            <SkewTransform/>
+                                                            <RotateTransform Angle="180"/>
+                                                            <TranslateTransform Y="-1.9960000000000018"/>
+                                                        </TransformGroup>
+                                                    </Path.RenderTransform>
+                                                </Path>
+                                                <Path Data="M0,0 L6.03,0 L6.03,13.413 L0,13.413 z" Fill="#CC27A2D5" Stretch="Fill" Stroke="{x:Null}" StrokeThickness="0"/>
+                                                <TextBlock  Text="{Binding Value, RelativeSource={RelativeSource AncestorType={x:Type Slider}, Mode=FindAncestor}}" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="9.333" Margin="2,0" Foreground="White"><Run Text="TextBlock"/></TextBlock>
+                                            </Grid>
+                                        </Canvas>
+                                        <Rectangle x:Name="fillRectangle" Fill="#FF27A2D5" Stroke="{x:Null}" StrokeThickness="1.0" HorizontalAlignment="Left" Width="{Binding ActualWidth, ElementName=repeatButton1}" Margin="0,1"/>
+                                        <Border x:Name="TrackBackground" BorderBrush="{StaticResource HorizontalSliderTrackNormalBorder}" BorderThickness="1" Background="{StaticResource HorizontalSliderTrackNormalBackground}" CornerRadius="1" Height="Auto" Margin="5,0" Grid.Row="1" VerticalAlignment="center" Visibility="Collapsed">
+                                            <Canvas Background="Black">
+                                                <Rectangle x:Name="PART_SelectionRange" Fill="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" Height="4.0" Stroke="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}" StrokeThickness="1.0" Visibility="Visible"/>
+                                            </Canvas>
+                                        </Border>
+                                        <Track x:Name="PART_Track" Grid.Row="1">
+
+                                            <Track.DecreaseRepeatButton>
+                                                <RepeatButton x:Name="repeatButton1" Command="{x:Static Slider.DecreaseLarge}" Style="{StaticResource SliderRepeatButtonStyle}"/>
+                                            </Track.DecreaseRepeatButton>
+                                            <Track.IncreaseRepeatButton>
+                                                <RepeatButton x:Name="repeatButton" Command="{x:Static Slider.IncreaseLarge}" Style="{StaticResource SliderRepeatButtonStyle}"/>
+
+                                            </Track.IncreaseRepeatButton>
+                                            <Track.Thumb>
+                                                <Thumb x:Name="Thumb" Style="{StaticResource HorizontalSliderThumbStyle}"  Height="Auto" Width="11" Margin="0,-2"/>
+                                            </Track.Thumb>
+                                        </Track>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="TickPlacement" Value="TopLeft">
+                                    <Setter Property="Style" TargetName="Thumb" Value="{StaticResource HorizontalSliderUpThumbStyle}"/>
+                                    <Setter Property="Margin" TargetName="TrackBackground" Value="5,2,5,0"/>
+                                </Trigger>
+                                <Trigger Property="TickPlacement" Value="BottomRight">
+
+                                    <Setter Property="Margin" TargetName="TrackBackground" Value="5,0,5,2"/>
+                                    <Setter Property="Visibility" TargetName="BottomTick" Value="Visible"/>
+                                </Trigger>
+                                <Trigger Property="TickPlacement" Value="Both"/>
+                                <Trigger Property="IsSelectionRangeEnabled" Value="true">
+                                    <Setter Property="Visibility" TargetName="PART_SelectionRange" Value="Visible"/>
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Visibility" TargetName="canvas" Value="Visible"/>
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsKeyboardFocused" Value="False"/>
+                                        <Condition Property="IsMouseOver" Value="False"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Visibility" TargetName="canvas" Value="Collapsed"/>
+                                </MultiTrigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsKeyboardFocused" Value="True"/>
+                                        <Condition Property="IsMouseOver" Value="False"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Visibility" TargetName="canvas" Value="Visible"/>
+                                </MultiTrigger>
+
+                                <Trigger Property="IsKeyboardFocused" Value="true">
+                                    <Setter Property="Foreground" TargetName="Thumb" Value="Blue"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="Orientation" Value="Vertical">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Slider}">
+                                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition MinWidth="{TemplateBinding MinWidth}" Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TickBar x:Name="TopTick" Grid.Column="0" Fill="{TemplateBinding Foreground}" Placement="Left" Visibility="Collapsed" Width="4"/>
+                                            <TickBar x:Name="BottomTick" Grid.Column="2" Fill="{TemplateBinding Foreground}" Placement="Right" Visibility="Collapsed" Width="4"/>
+                                            <Border x:Name="TrackBackground" BorderBrush="{StaticResource VerticalSliderTrackNormalBorder}" BorderThickness="1" Background="{StaticResource HorizontalSliderTrackNormalBackground}" Grid.Column="1" CornerRadius="1" HorizontalAlignment="center" Margin="0,5" Width="4.0">
+                                                <Canvas Margin="-1,-6">
+                                                    <Rectangle x:Name="PART_SelectionRange" Fill="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" Stroke="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}" StrokeThickness="1.0" Visibility="Hidden" Width="4.0"/>
+                                                </Canvas>
+                                            </Border>
+                                            <Track x:Name="PART_Track" Grid.Column="1">
+                                                <Track.DecreaseRepeatButton>
+                                                    <RepeatButton Command="{x:Static Slider.DecreaseLarge}" Style="{StaticResource SliderRepeatButtonStyle}"/>
+                                                </Track.DecreaseRepeatButton>
+                                                <Track.IncreaseRepeatButton>
+                                                    <RepeatButton Command="{x:Static Slider.IncreaseLarge}" Style="{StaticResource SliderRepeatButtonStyle}"/>
+                                                </Track.IncreaseRepeatButton>
+                                                <Track.Thumb>
+                                                    <Thumb x:Name="Thumb" Style="{StaticResource VerticalSliderThumbStyle}"/>
+                                                </Track.Thumb>
+                                            </Track>
+                                        </Grid>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="TickPlacement" Value="TopLeft">
+                                            <Setter Property="Visibility" TargetName="TopTick" Value="Visible"/>
+                                            <Setter Property="Style" TargetName="Thumb" Value="{StaticResource VerticalSliderLeftThumbStyle}"/>
+                                            <Setter Property="Margin" TargetName="TrackBackground" Value="2,5,0,5"/>
+                                        </Trigger>
+                                        <Trigger Property="TickPlacement" Value="BottomRight">
+                                            <Setter Property="Visibility" TargetName="BottomTick" Value="Visible"/>
+                                            <Setter Property="Style" TargetName="Thumb" Value="{StaticResource VerticalSliderRightThumbStyle}"/>
+                                            <Setter Property="Margin" TargetName="TrackBackground" Value="0,5,2,5"/>
+                                        </Trigger>
+                                        <Trigger Property="TickPlacement" Value="Both">
+                                            <Setter Property="Visibility" TargetName="TopTick" Value="Visible"/>
+                                            <Setter Property="Visibility" TargetName="BottomTick" Value="Visible"/>
+                                        </Trigger>
+                                        <Trigger Property="IsSelectionRangeEnabled" Value="true">
+                                            <Setter Property="Visibility" TargetName="PART_SelectionRange" Value="Visible"/>
+                                        </Trigger>
+                                        <Trigger Property="IsKeyboardFocused" Value="true">
+                                            <Setter Property="Foreground" TargetName="Thumb" Value="Blue"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style x:Key="TimeDecaySlider" TargetType="{x:Type Slider}">
+                <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="#FFC4C4C4"/>
+                <Setter Property="BorderBrush" Value="#FFcccccc"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="MinHeight" Value="4"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Slider}">
+                            <Grid>
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="ToolTipShowStates">
+                                        <VisualState x:Name="ShowTooltip">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="canvas">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="canvas">
+                                                    <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
+                                                </DoubleAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="HideTooltip">
+                                            <Storyboard>
+                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="canvas">
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+                                                </DoubleAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="canvas">
+                                                    <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Collapsed}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+
+                                <TickBar x:Name="BottomTick" Fill="{TemplateBinding Foreground}" Height="4" Placement="Bottom" Grid.Row="2" Visibility="Collapsed" VerticalAlignment="Bottom" Margin="0,0,0,-10"/>
+                                <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="False">
+                                    <Grid Margin="1,0">
+                                        <Canvas x:Name="canvas" Height="6" Margin="-9,-18,0,0" VerticalAlignment="Top" Width="Auto" Visibility="Collapsed">
+                                            <Grid Height="Auto" Canvas.Left="{Binding ActualWidth, ElementName=fillRectangle}">
+
+                                                <Path Data="M0,0 L6.03,0 L6.03,13.413 L0,13.413 z" Fill="#CC27A2D5" Stretch="Fill" Stroke="{x:Null}" StrokeThickness="0"/>
+                                                <TextBlock TextWrapping="NoWrap" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="9.333" Margin="2,0" Foreground="White">
+                                                <TextBlock.Text>
+                                                    <MultiBinding Converter="{StaticResource TickConverter}">
+                                                        <Binding RelativeSource="{RelativeSource AncestorType={x:Type Slider}, Mode=FindAncestor}" Path="Value"/>
+                                                        <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="DataContext.TimeDecay.SliderTicks"/>
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                                </TextBlock>
+                                            </Grid>
+                                        </Canvas>
+                                        <Rectangle x:Name="fillRectangle" Fill="#FF27A2D5" Stroke="{x:Null}" StrokeThickness="1.0" HorizontalAlignment="Left" Width="{Binding ActualWidth, ElementName=repeatButton1}" Margin="0,1"/>
+                                        <Border x:Name="TrackBackground" BorderBrush="{StaticResource HorizontalSliderTrackNormalBorder}" BorderThickness="1" Background="{StaticResource HorizontalSliderTrackNormalBackground}" CornerRadius="1" Height="Auto" Margin="5,0" Grid.Row="1" VerticalAlignment="center" Visibility="Collapsed">
+                                            <Canvas Background="Black">
+                                                <Rectangle x:Name="PART_SelectionRange" Fill="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" Height="4.0" Stroke="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}" StrokeThickness="1.0" Visibility="Visible"/>
+                                            </Canvas>
+                                        </Border>
+                                        <Track x:Name="PART_Track" Grid.Row="1">
+
+                                            <Track.DecreaseRepeatButton>
+                                                <RepeatButton x:Name="repeatButton1" Command="{x:Static Slider.DecreaseLarge}" Style="{StaticResource SliderRepeatButtonStyle}"/>
+                                            </Track.DecreaseRepeatButton>
+                                            <Track.IncreaseRepeatButton>
+                                                <RepeatButton x:Name="repeatButton" Command="{x:Static Slider.IncreaseLarge}" Style="{StaticResource SliderRepeatButtonStyle}"/>
+
+                                            </Track.IncreaseRepeatButton>
+                                            <Track.Thumb>
+                                                <Thumb x:Name="Thumb" Style="{StaticResource HorizontalSliderThumbStyle}"  Height="Auto" Width="11" Margin="0,-2"/>
+                                            </Track.Thumb>
+                                        </Track>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="TickPlacement" Value="TopLeft">
+                                    <Setter Property="Style" TargetName="Thumb" Value="{StaticResource HorizontalSliderUpThumbStyle}"/>
+                                    <Setter Property="Margin" TargetName="TrackBackground" Value="5,2,5,0"/>
+                                </Trigger>
+                                <Trigger Property="TickPlacement" Value="BottomRight">
+
+                                    <Setter Property="Margin" TargetName="TrackBackground" Value="5,0,5,2"/>
+                                    <Setter Property="Visibility" TargetName="BottomTick" Value="Visible"/>
+                                </Trigger>
+                                <Trigger Property="TickPlacement" Value="Both"/>
+                                <Trigger Property="IsSelectionRangeEnabled" Value="true">
+                                    <Setter Property="Visibility" TargetName="PART_SelectionRange" Value="Visible"/>
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Visibility" TargetName="canvas" Value="Visible"/>
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsKeyboardFocused" Value="False"/>
+                                        <Condition Property="IsMouseOver" Value="False"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Visibility" TargetName="canvas" Value="Collapsed"/>
+                                </MultiTrigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsKeyboardFocused" Value="True"/>
+                                        <Condition Property="IsMouseOver" Value="False"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Visibility" TargetName="canvas" Value="Visible"/>
+                                </MultiTrigger>
+
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="Orientation" Value="Vertical">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Slider}">
+                                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition MinWidth="{TemplateBinding MinWidth}" Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TickBar x:Name="TopTick" Grid.Column="0" Fill="{TemplateBinding Foreground}" Placement="Left" Visibility="Collapsed" Width="4"/>
+                                            <TickBar x:Name="BottomTick" Grid.Column="2" Fill="{TemplateBinding Foreground}" Placement="Right" Visibility="Collapsed" Width="4"/>
+                                            <Border x:Name="TrackBackground" BorderBrush="{StaticResource VerticalSliderTrackNormalBorder}" BorderThickness="1" Background="{StaticResource HorizontalSliderTrackNormalBackground}" Grid.Column="1" CornerRadius="1" HorizontalAlignment="center" Margin="0,5" Width="4.0">
+                                                <Canvas Margin="-1,-6">
+                                                    <Rectangle x:Name="PART_SelectionRange" Fill="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" Stroke="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}" StrokeThickness="1.0" Visibility="Hidden" Width="4.0"/>
+                                                </Canvas>
+                                            </Border>
+                                            <Track x:Name="PART_Track" Grid.Column="1">
+                                                <Track.DecreaseRepeatButton>
+                                                    <RepeatButton Command="{x:Static Slider.DecreaseLarge}" Style="{StaticResource SliderRepeatButtonStyle}"/>
+                                                </Track.DecreaseRepeatButton>
+                                                <Track.IncreaseRepeatButton>
+                                                    <RepeatButton Command="{x:Static Slider.IncreaseLarge}" Style="{StaticResource SliderRepeatButtonStyle}"/>
+                                                </Track.IncreaseRepeatButton>
+                                                <Track.Thumb>
+                                                    <Thumb x:Name="Thumb" Style="{StaticResource VerticalSliderThumbStyle}"/>
+                                                </Track.Thumb>
+                                            </Track>
+                                        </Grid>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="TickPlacement" Value="TopLeft">
+                                            <Setter Property="Visibility" TargetName="TopTick" Value="Visible"/>
+                                            <Setter Property="Style" TargetName="Thumb" Value="{StaticResource VerticalSliderLeftThumbStyle}"/>
+                                            <Setter Property="Margin" TargetName="TrackBackground" Value="2,5,0,5"/>
+                                        </Trigger>
+                                        <Trigger Property="TickPlacement" Value="BottomRight">
+                                            <Setter Property="Visibility" TargetName="BottomTick" Value="Visible"/>
+                                            <Setter Property="Style" TargetName="Thumb" Value="{StaticResource VerticalSliderRightThumbStyle}"/>
+                                            <Setter Property="Margin" TargetName="TrackBackground" Value="0,5,2,5"/>
+                                        </Trigger>
+                                        <Trigger Property="TickPlacement" Value="Both">
+                                            <Setter Property="Visibility" TargetName="TopTick" Value="Visible"/>
+                                            <Setter Property="Visibility" TargetName="BottomTick" Value="Visible"/>
+                                        </Trigger>
+                                        <Trigger Property="IsSelectionRangeEnabled" Value="true">
+                                            <Setter Property="Visibility" TargetName="PART_SelectionRange" Value="Visible"/>
+                                        </Trigger>
+                                        <Trigger Property="IsKeyboardFocused" Value="true">
+                                            <Setter Property="Foreground" TargetName="Thumb" Value="Blue"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <!-- Layer combobox data template -->
+            <DataTemplate x:Key="SelectLayerCBItemTemplate">
+                <TextBlock Margin="0,0,0,0" Style="{DynamicResource labelTBStyle}" 
+                       Text="{Binding Layers.Name}"/>
+            </DataTemplate>
+
+            <Style x:Key="RefrenceFrameTreeViewItemStyle" TargetType="{x:Type TreeViewItem}">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="Padding" Value="1,1,5,1"/>
+                <Setter Property="Foreground" Value="#FF1c1c1c"/>
+                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TreeViewItem}">
+
+                            <Grid >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition MinWidth="19" Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+
+                                <Rectangle Margin="-3,0,0,0" Grid.Column="1" x:Name="bg" RadiusX="3" RadiusY="3" SnapsToDevicePixels="true"/>
+                                <Border CornerRadius="3"  x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.Column="1" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                                    <ContentPresenter  ContentSource="Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                </Border>
+
+                                <ToggleButton   x:Name="Expander" ClickMode="Release" IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" Style="{DynamicResource TreeToggleButtonStyle}" Grid.ColumnSpan="1"/>
+                                <ItemsPresenter x:Name="ItemsHost" Grid.ColumnSpan="3" Grid.Column="1" Grid.Row="1"/>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+
+                                <Trigger Property="IsExpanded" Value="false">
+                                    <Setter Property="Visibility" TargetName="ItemsHost" Value="Collapsed"/>
+                                    <Setter Property="IsSelected" Value="False"/>
+                                </Trigger>
+
+
+                                <Trigger Property="HasItems" Value="false">
+                                    <Setter Property="Visibility" TargetName="Expander" Value="Hidden"/>
+                                    <Setter Property="Foreground" Value="#FF1c1c1c"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Fill" TargetName="bg" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsSelected" Value="true"/>
+                                        <Condition Property="IsSelectionActive" Value="false"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Fill" TargetName="bg" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+                                    <Setter Property="Fill" TargetName="bg" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                                    <Setter Property="Opacity" TargetName="bg" Value=".7"/>
+
+                                </MultiTrigger>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="VirtualizingStackPanel.IsVirtualizing" Value="true">
+                        <Setter Property="ItemsPanel">
+                            <Setter.Value>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel/>
+                                </ItemsPanelTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style x:Key="UnselectTreeItemStyle" TargetType="{x:Type TreeViewItem}">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="Padding" Value="1,0,0,0"/>
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                            <Grid >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition MinWidth="19" Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+
+
+                                <Border IsHitTestVisible="True" IsEnabled="False" x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.Column="1" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                                    <ContentPresenter  ContentSource="Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                </Border>
+                                <Rectangle x:Name="rect" Opacity="0" IsEnabled="False" IsHitTestVisible="False" Grid.ColumnSpan="3" Fill="#44444444"/>
+                                <ToggleButton  x:Name="Expander" ClickMode="Press" IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" Style="{DynamicResource TreeToggleButtonStyle}" Grid.ColumnSpan="1"/>
+                                <ItemsPresenter x:Name="ItemsHost" Grid.ColumnSpan="2" Grid.Column="1" Grid.Row="1"/>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsExpanded" Value="false">
+                                    <Setter Property="Visibility" TargetName="ItemsHost" Value="Collapsed"/>
+                                    <Setter Property="IsSelected" Value="False"/>
+                                </Trigger>
+                                <Trigger Property="HasItems" Value="false">
+                                    <Setter Property="Visibility" TargetName="Expander" Value="Hidden"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="true">
+                                    <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsSelected" Value="true"/>
+                                        <Condition Property="IsSelectionActive" Value="false"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                                </MultiTrigger>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="VirtualizingStackPanel.IsVirtualizing" Value="true">
+                        <Setter Property="ItemsPanel">
+                            <Setter.Value>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel/>
+                                </ItemsPanelTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style x:Key="LayerNameTreeViewItemStyle" TargetType="{x:Type TreeViewItem}">
+                <Setter Property="IsExpanded" Value="true"/>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="Padding" Value="1,0,0,0"/>
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                            <Grid   >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition MinWidth="19" Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Border Grid.ColumnSpan="2" IsHitTestVisible="False" IsEnabled="False" x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.Column="1" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                                    <ContentPresenter  ContentSource="Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                </Border>
+                                <Rectangle x:Name="rect" Opacity="1"  IsHitTestVisible="False" Grid.ColumnSpan="3" Fill="#11444444"/>
+                                <ToggleButton  x:Name="Expander" ClickMode="Press" IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" Style="{DynamicResource TreeToggleButtonStyle}" Grid.ColumnSpan="3"/>
+                                <ItemsPresenter x:Name="ItemsHost" Grid.ColumnSpan="2" Grid.Column="1" Grid.Row="1"/>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+
+                                <Trigger Property="IsExpanded" Value="false">
+                                    <Setter Property="Visibility" TargetName="ItemsHost" Value="Collapsed"/>
+                                    <Setter Property="IsSelected" Value="False"/>
+                                </Trigger>
+                                <Trigger Property="HasItems" Value="false">
+                                    <Setter Property="Visibility" TargetName="Expander" Value="Hidden"/>
+                                    <Setter Property="IsHitTestVisible" TargetName="Bd" Value="true"/>
+                                    <Setter Property="Visibility" TargetName="rect" Value="Collapsed"/>
+
+                                </Trigger>
+                                <MultiTrigger >
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="HasItems" Value="False"/>
+                                        <Condition Property="IsMouseOver" Value="true"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Background" TargetName="Bd" Value="#22444444
+                                            "/>
+
+                                    <Setter Property="Foreground" Value="Black"/>
+                                </MultiTrigger>
+                                <Trigger Property="IsSelected" Value="true">
+                                    <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsSelected" Value="true"/>
+                                        <Condition Property="IsSelectionActive" Value="false"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                                </MultiTrigger>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="VirtualizingStackPanel.IsVirtualizing" Value="true">
+                        <Setter Property="ItemsPanel">
+                            <Setter.Value>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel/>
+                                </ItemsPanelTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <HierarchicalDataTemplate x:Key="TreeViewItemTemplate" ItemsSource="{Binding Children}" >
+                <StackPanel>
+                    <TextBlock Text="{Binding Name}"/>
+                </StackPanel>
+            </HierarchicalDataTemplate>
+            <HierarchicalDataTemplate x:Key="LayerTreeViewItemTemplate" ItemsSource="{Binding AllChildren}" >
+                <StackPanel >
+                    <TextBlock x:Name="contentTB" Text="{Binding Name}"/>
+                </StackPanel>
+                <HierarchicalDataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding IsDeleted}" Value="True">
+                        <Setter TargetName="contentTB" Property="Foreground" Value="Red" />
+                    </DataTrigger>
+                </HierarchicalDataTemplate.Triggers>
+            </HierarchicalDataTemplate>
+            <DataTemplate x:Key="DefaultDataTemplate">
+                <TextBlock Text="{Binding Name}"/>
+            </DataTemplate>
+            <DataTemplate x:Key="ReferenceItemTemplate">
+                <Grid>
+                    <TreeView MaxHeight="220" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" BorderThickness="0"  x:Name="groupTreeview" ItemContainerStyle="{DynamicResource RefrenceFrameTreeViewItemStyle}"  
+                              ItemsSource="{Binding ReferenceGroup}" 
+                              ItemTemplate="{DynamicResource TreeViewItemTemplate}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectedItemChanged" SourceName="groupTreeview">
+                                <i:InvokeCommandAction x:Name="GroupSelectionCommand" 
+                                                       Command="{Binding GroupSelectionCommand}" 
+                                                       CommandParameter="{Binding SelectedItem, ElementName=groupTreeview}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TreeView>
+                </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="LayernameItemTemplate">
+                <Expander IsExpanded="True" Header="{Binding Name}" Style="{DynamicResource GroupExpanderStyle}"  >
+                    <TreeView  ScrollViewer.VerticalScrollBarVisibility="Disabled" x:Name="layerTreeView" BorderThickness="0" Margin="17,0,0,0"  ItemContainerStyle="{DynamicResource LayerNameTreeViewItemStyle}" 
+                             ItemsSource="{Binding GroupCollection}" SelectedValuePath="{Binding Name,Mode=TwoWay}" ItemTemplate="{DynamicResource LayerTreeViewItemTemplate}" >
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectedItemChanged" SourceName="layerTreeView">
+                                <i:InvokeCommandAction x:Name="LayerSelectionCommand" 
+                                                       Command="{Binding LayerSelectionCommand}" 
+                                                       CommandParameter="{Binding SelectedItem, ElementName=layerTreeView}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TreeView>
+                </Expander>
+            </DataTemplate>
+
+            <Style x:Key="ReferanceItemStyle" TargetType="ComboBoxItem">
+                <Setter Property="Template" >
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ComboBoxItem">
+                            <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="LayerNameItemStyle" TargetType="ComboBoxItem">
+                <Setter Property="ContentTemplate" Value="{DynamicResource LayernameItemTemplate}"/>
+                <Setter Property="Template" >
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ComboBoxItem">
+                            <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Path=ID}" Value="-1">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource DefaultDataTemplate}"/>
+                        <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                        <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                        <Setter Property="Padding" Value="19,0,3,0"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+                                    <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsHighlighted" Value="true">
+                                            <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled" Value="false">
+                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+            <Storyboard x:Key="CallOutLoadAnimation">
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="callOutGrid">
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="1"/>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="callOutGrid">
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-25"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="0"/>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.Opacity)" Storyboard.TargetName="rectangle">
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="0"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:1.2" Value="0.87"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:1.8" Value="0.295"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:2.4" Value="0.89"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:2.9" Value="0.3"/>
+                </DoubleAnimationUsingKeyFrames>
+            </Storyboard>
+            <Storyboard x:Key="ShowHighlightAnimation" >
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="ViewAlertBG">
+                    <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.477" Value="1"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:1" Value="1"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:1.05" Value="1"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:1.5" Value="1"/>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames RepeatBehavior="Forever" Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.Opacity)" Storyboard.TargetName="ViewAlertBG">
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:1" Value="0.3"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:1.5" Value="0"/>
+                </DoubleAnimationUsingKeyFrames>
+                <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="border">
+                    <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="0,-15,0,3">
+                        <EasingThicknessKeyFrame.EasingFunction>
+                            <QuinticEase EasingMode="EaseOut"/>
+                        </EasingThicknessKeyFrame.EasingFunction>
+                    </EasingThicknessKeyFrame>
+                </ThicknessAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="border">
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1.1">
+                        <EasingDoubleKeyFrame.EasingFunction>
+                            <QuinticEase EasingMode="EaseOut"/>
+                        </EasingDoubleKeyFrame.EasingFunction>
+                    </EasingDoubleKeyFrame>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="border">
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1.1">
+                        <EasingDoubleKeyFrame.EasingFunction>
+                            <QuinticEase EasingMode="EaseOut"/>
+                        </EasingDoubleKeyFrame.EasingFunction>
+                    </EasingDoubleKeyFrame>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="border">
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="15">
+                        <EasingDoubleKeyFrame.EasingFunction>
+                            <QuinticEase EasingMode="EaseOut"/>
+                        </EasingDoubleKeyFrame.EasingFunction>
+                    </EasingDoubleKeyFrame>
+                </DoubleAnimationUsingKeyFrames>
+                <ColorAnimationUsingKeyFrames RepeatBehavior="Forever" Storyboard.TargetProperty="(Shape.Stroke).(SolidColorBrush.Color)" Storyboard.TargetName="ViewAlertBG">
+                    <EasingColorKeyFrame KeyTime="0:0:0.5" Value="#FFD6B381"/>
+                    <EasingColorKeyFrame KeyTime="0:0:1" Value="#FFCE6D0B"/>
+                    <EasingColorKeyFrame KeyTime="0:0:1.4" Value="#FFD6B381"/>
+                </ColorAnimationUsingKeyFrames>
+            </Storyboard>
+            <Storyboard x:Key="HideHighlightAnimation">
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="border">
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0">
+                        <EasingDoubleKeyFrame.EasingFunction>
+                            <QuinticEase EasingMode="EaseOut"/>
+                        </EasingDoubleKeyFrame.EasingFunction>
+                    </EasingDoubleKeyFrame>
+                </DoubleAnimationUsingKeyFrames>
+                <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="border">
+                    <EasingThicknessKeyFrame KeyTime="0:0:0.3" Value="0,-5,0,3">
+                        <EasingThicknessKeyFrame.EasingFunction>
+                            <QuinticEase EasingMode="EaseOut"/>
+                        </EasingThicknessKeyFrame.EasingFunction>
+                    </EasingThicknessKeyFrame>
+                </ThicknessAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="ViewAlertBG">
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="0"/>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="border">
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1">
+                        <EasingDoubleKeyFrame.EasingFunction>
+                            <QuinticEase EasingMode="EaseOut"/>
+                        </EasingDoubleKeyFrame.EasingFunction>
+                    </EasingDoubleKeyFrame>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="border">
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1">
+                        <EasingDoubleKeyFrame.EasingFunction>
+                            <QuinticEase EasingMode="EaseOut"/>
+                        </EasingDoubleKeyFrame.EasingFunction>
+                    </EasingDoubleKeyFrame>
+                </DoubleAnimationUsingKeyFrames>
+            </Storyboard>
+            <ItemsPanelTemplate x:Key="PushpinItemPanelTemplate">
+                <WrapPanel/>
+            </ItemsPanelTemplate>
+            <DataTemplate x:Key="PushpinItemTemplate">
+                <Image Width="32" Height="32"  Stretch="Uniform" Source="{Binding Path=Value}" />
+            </DataTemplate>
+            <Style x:Key="ComboBoxFocusVisual">
+                <Setter Property="Control.Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <Rectangle Margin="4,4,4,4" SnapsToDevicePixels="true" Stroke="White" StrokeThickness="1" StrokeDashArray="1 2"/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="ComboBoxReadonlyToggleButton" TargetType="{x:Type ToggleButton}">
+                <Setter Property="OverridesDefaultStyle" Value="true"/>
+                <Setter Property="IsTabStop" Value="false"/>
+                <Setter Property="Focusable" Value="false"/>
+                <Setter Property="ClickMode" Value="Press"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ToggleButton}">
+                            <Grid HorizontalAlignment="Stretch" Background="#00DA8585">
+                                <Border x:Name="hoverBorder" BorderThickness="2" >
+                                </Border>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <Setter Property="BorderBrush" TargetName="hoverBorder" Value="#FFFF7500"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="PushPinDropDownStyle" TargetType="{x:Type ComboBox}">
+                <Setter Property="FocusVisualStyle" Value="{StaticResource ComboBoxFocusVisual}"/>
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"/>
+                <Setter Property="Background" Value="{StaticResource ButtonNormalBackground}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource ButtonNormalBorder}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+                <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+                <Setter Property="Padding" Value="4,3"/>
+                <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
+                <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
+                <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ComboBox}">
+                            <Border BorderBrush="#FF707070" BorderThickness="1" CornerRadius="2">
+                                <Border BorderThickness="1" BorderBrush="White" CornerRadius="1">
+                                    <Grid x:Name="MainGrid" SnapsToDevicePixels="true">
+                                        <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}" Margin="1" PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}" Placement="Top" VerticalOffset="-1">
+                                            <Microsoft_Windows_Themes:SystemDropShadowChrome x:Name="Shdw" Color="Transparent" MaxHeight="{TemplateBinding MaxDropDownHeight}" MinWidth="{Binding ActualWidth, ElementName=MainGrid}" MaxWidth="269">
+                                                <Border x:Name="DropDownBorder" BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}" BorderThickness="1" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" Padding="0,0,0,1">
+                                                    <ScrollViewer x:Name="DropDownScrollViewer">
+                                                        <Grid RenderOptions.ClearTypeHint="Enabled">
+                                                            <Canvas HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
+                                                                <Rectangle x:Name="OpaqueRect" Fill="{Binding Background, ElementName=DropDownBorder}" Height="{Binding ActualHeight, ElementName=DropDownBorder}" Width="{Binding ActualWidth, ElementName=DropDownBorder}"/>
+                                                            </Canvas>
+                                                            <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Contained" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                                        </Grid>
+                                                    </ScrollViewer>
+                                                </Border>
+                                            </Microsoft_Windows_Themes:SystemDropShadowChrome>
+                                        </Popup>
+                                        <ContentPresenter ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" Content="{TemplateBinding SelectionBoxItem}" ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" IsHitTestVisible="false" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Opacity="1"/>
+                                        <ToggleButton BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" Grid.ColumnSpan="2" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Style="{StaticResource ComboBoxReadonlyToggleButton}" Opacity="1" Margin="-2"/>
+                                    </Grid>
+                                </Border>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="HasDropShadow" SourceName="PART_Popup" Value="true">
+                                    <Setter Property="Margin" TargetName="Shdw" Value="0,0,5,5"/>
+                                    <Setter Property="Color" TargetName="Shdw" Value="#71000000"/>
+                                </Trigger>
+                                <Trigger Property="HasItems" Value="false">
+                                    <Setter Property="Height" TargetName="DropDownBorder" Value="95"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                    <Setter Property="Background" Value="#FFF4F4F4"/>
+                                </Trigger>
+                                <Trigger Property="IsGrouping" Value="true">
+                                    <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                                </Trigger>
+                                <Trigger Property="ScrollViewer.CanContentScroll" SourceName="DropDownScrollViewer" Value="false">
+                                    <Setter Property="Canvas.Top" TargetName="OpaqueRect" Value="{Binding VerticalOffset, ElementName=DropDownScrollViewer}"/>
+                                    <Setter Property="Canvas.Left" TargetName="OpaqueRect" Value="{Binding HorizontalOffset, ElementName=DropDownScrollViewer}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="PushPinDropDownItemStyle" TargetType="{x:Type ComboBoxItem}">
+                <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+                            <Grid Height="Auto" Width="Auto" Margin="1,1,0,0">
+                                <ContentPresenter x:Name="content" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Border x:Name="Bd" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true" d:LayoutOverrides="Width, Height" BorderBrush="Black"/>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsHighlighted" Value="true">
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+                                    <Setter Property="BorderBrush" TargetName="Bd" Value="#FFFF7500"/>
+                                    <Setter Property="Background" TargetName="Bd" Value="Transparent"/>
+                                    <Setter Property="CornerRadius" TargetName="Bd" Value="2"/>
+                                    <Setter Property="BorderThickness" TargetName="Bd" Value="2"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Button Name="downloadUpdatesButton" Content="{Binding Path=DownloadUpdatesViewModelInstance.DownloadUpdatesLabel, Mode=TwoWay}" Height="22" Style="{DynamicResource UpdateButton}" IsEnabled="{Binding Path=DownloadUpdatesViewModelInstance.IsDownloadUpdatesEnabled, Mode=TwoWay}" Visibility="{Binding Path=DownloadUpdatesViewModelInstance.IsDownloadUpdatesVisible, Mode=TwoWay, Converter={StaticResource VisibilityConverter}}" ToolTip="{Binding Path=DownloadUpdatesButtonToolTip, Source={StaticResource ResourceKeyStrings}}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Click" SourceName="downloadUpdatesButton">
+                    <i:InvokeCommandAction x:Name="DownloadUpdatesCommand" 
+                                                    Command="{Binding DownloadUpdatesCommand}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Button>
+        <Border Grid.Row="1" x:Name="SelectLayerContainer" Background="{DynamicResource SemiTransparentWhiteBrush}"
+                    BorderBrush="{DynamicResource SplitterLineBrush}" BorderThickness="0,0,0,1" 
+                   >
+            <Grid Margin="7,0" VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{DynamicResource LabelColumnWidth}"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock TextWrapping="Wrap" Text="{Binding Path=SelectLayer, Source={StaticResource ResourceKeyStrings}}" 
+                               Style="{DynamicResource themablelabelTextBlockStyle}" VerticalAlignment="Center"  />
+                <ComboBox    Tag="{Binding SelectedLayerText,Mode=TwoWay}" Height="22" Foreground="#FF787878" x:Name="layerCombo" Grid.Column="1" Background="{DynamicResource WhiteBrush}" 
+                          BorderBrush="{DynamicResource DropDownBorderBrush}" ScrollViewer.CanContentScroll="False"
+                Margin="{DynamicResource MarginFromLabel}"  Style="{DynamicResource LayerNameComboBoxStyle}" 
+                ItemContainerStyle="{DynamicResource LayerNameItemStyle}" ItemsSource="{Binding Layers}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged" SourceName="layerCombo">
+                            <i:InvokeCommandAction x:Name="SelectionCommand" 
+                                                       Command="{Binding SelectionCommand}" 
+                                                       CommandParameter="{Binding SelectedItem, ElementName=layerCombo}"/>
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="DropDownOpened" SourceName="layerCombo">
+                            <i:InvokeCommandAction x:Name="RefreshDropDownCommand" 
+                                                       Command="{Binding RefreshDropDownCommand}" 
+                                                       CommandParameter="{Binding SelectedItem, ElementName=layerCombo}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <ComboBox.ToolTip>
+                        <TextBlock MaxWidth="400" TextWrapping="Wrap" Text="{Binding Path=SelectLayerComboBoxToolTip, Source={StaticResource ResourceKeyStrings}}" />
+                    </ComboBox.ToolTip>
+                </ComboBox>
+
+            </Grid>
+        </Border>
+        <Border x:Name="HelpInfoContainer" Grid.Row="2" Padding="7,0" Visibility="{Binding Path=IsHelpTextVisible,Mode=TwoWay,Converter={StaticResource VisibilityConverter}}">
+            <Grid>
+                <Image Margin="-7,0,0,0" Height="85" Source="/Microsoft.Research.Wwt.Excel.Addin;component/Resources/Images/HelpInfo.png" Stretch="None" VerticalAlignment="Top" HorizontalAlignment="Left" d:LayoutOverrides="VerticalAlignment" Opacity="0.3"/>
+                <StackPanel >
+                    <ContentControl ContentTemplate="{DynamicResource HelpInfoContentTemplate}" Content="{Binding HelpInfoText1, Source={StaticResource ResourceKeyStrings}}" />
+                    <ContentControl ContentTemplate="{DynamicResource HelpInfoContentTemplate}" Content="{Binding HelpInfoText2, Source={StaticResource ResourceKeyStrings}}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+        <Border x:Name="CenterPaneContainer" Grid.Row="3" Padding="7,0" Visibility="{Binding Path=IsTabVisible,Mode=TwoWay, Converter={StaticResource VisibilityConverter}}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Rectangle x:Name="SplitterLine" Fill="{DynamicResource SplitterLineBrush}" Height="1" VerticalAlignment="Bottom"/>
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,10,0" d:LayoutOverrides="Width">
+                        <Button Content="{Binding Path=ShowRange, Source={StaticResource ResourceKeyStrings}}" Width="120" Margin="0,5,0,0" Style="{DynamicResource LayerManagerButtonStyle}"
+                                    IsEnabled="{Binding IsShowRangeEnabled,Mode=TwoWay}" Tag="/Microsoft.Research.Wwt.Excel.Addin;component/Resources/Images/ShowLayer.png">
+                            <Button.ToolTip>
+                                <TextBlock MaxWidth="400" TextWrapping="Wrap" Text="{Binding Path=ShowRangeButtonToolTip, Source={StaticResource ResourceKeyStrings}}" />
+                            </Button.ToolTip>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <i:InvokeCommandAction x:Name="ShowRangeCommand" 
+                                                    Command="{Binding ShowRangeCommand}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+                        <Button Content="{Binding Path=UpdateRange, Source={StaticResource ResourceKeyStrings}}" Width="120" Margin="5,5,0,0" Style="{DynamicResource LayerManagerButtonStyle}"
+                                    IsEnabled="{Binding IsUpdateLayerEnabled,Mode=TwoWay}" Tag="/Microsoft.Research.Wwt.Excel.Addin;component/Resources/Images/SetLayerData.png">
+                            <Button.ToolTip>
+                                <TextBlock MaxWidth="400" TextWrapping="Wrap" Text="{Binding Path=UpdateRangeButtonToolTip, Source={StaticResource ResourceKeyStrings}}" />
+                            </Button.ToolTip>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <i:InvokeCommandAction x:Name="UpdateLayerCommand" 
+                                                    Command="{Binding UpdateLayerCommand}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,10,0" d:LayoutOverrides="Width">
+                        <Button Content="{Binding LayerDataDisplayName, Mode=TwoWay}" Width="120" Margin="0,5" Style="{DynamicResource LayerManagerButtonStyle}" 
+                                    IsEnabled="{Binding IsGetLayerDataEnabled,Mode=TwoWay}" Tag="/Microsoft.Research.Wwt.Excel.Addin;component/Resources/Images/GetLayerData.png">
+                            <Button.ToolTip>
+                                <TextBlock MaxWidth="400" TextWrapping="Wrap" Text="{Binding Path=GetLayerDataButtonToolTip, Source={StaticResource ResourceKeyStrings}}" />
+                            </Button.ToolTip>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <i:InvokeCommandAction x:Name="GetLayerDataCommand" 
+                                                    Command="{Binding GetLayerDataCommand}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+                        <Button Content="{Binding Path=DeleteMapping, Source={StaticResource ResourceKeyStrings}}" Width="120" Margin="5,5,0,5" Style="{DynamicResource LayerManagerButtonStyle}" 
+                                    IsEnabled="{Binding IsDeleteMappingEnabled,Mode=TwoWay}" Tag="/Microsoft.Research.Wwt.Excel.Addin;component/Resources/Images/DeleteMappings.png">
+                            <Button.ToolTip>
+                                <TextBlock MaxWidth="400" TextWrapping="Wrap" Text="{Binding Path=DeleteMappingButtonToolTip, Source={StaticResource ResourceKeyStrings}}" />
+                            </Button.ToolTip>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <i:InvokeCommandAction x:Name="DeleteMappingCommand" 
+                                                    Command="{Binding DeleteMappingCommand}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+                <Border Grid.Row="1" Background="{DynamicResource SemiTransparentWhiteBrush}" BorderBrush="{DynamicResource SplitterLineBrush}" BorderThickness="0,0,0,0">
+                    <StackPanel Margin="0,3,0,0">
+                        <Grid VerticalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="{DynamicResource LabelColumnWidth}"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock TextWrapping="Wrap" Text="{Binding Path=LayerName, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource themablelabelTextBlockStyle}" VerticalAlignment="Center" Foreground="{DynamicResource LabelForeground}" />
+                            <TextBox Height="22" x:Name="selectedLayer"  TextWrapping="NoWrap" AcceptsReturn="False" MaxLength="100" MaxLines="1" Text="{Binding SelectedLayerName,Mode=TwoWay}" Style="{DynamicResource TextBoxStyle}" Grid.Column="1" Margin="{DynamicResource MarginFromLabel}" SelectionBrush="#FF1D1D1D">
+                                <TextBox.ToolTip>
+                                    <TextBlock MaxWidth="400" TextWrapping="Wrap" Text="{Binding Path=LayerNameTextBoxToolTip, Source={StaticResource ResourceKeyStrings}}" />
+                                </TextBox.ToolTip>
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="LostKeyboardFocus">
+                                        <i:InvokeCommandAction x:Name="LayerNameLostKeyboardFocusCommand" 
+                                                    Command="{Binding LayerMapNameChangeCommand}" 
+                                                    CommandParameter="{Binding Text,ElementName=selectedLayer}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </TextBox>
+                        </Grid>
+                        <Grid VerticalAlignment="Center" Margin="0,4,0,4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="{DynamicResource LabelColumnWidth}"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock TextWrapping="Wrap" Text="{Binding Path=ReferenceFrame, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource themablelabelTextBlockStyle}" VerticalAlignment="Center" Foreground="{DynamicResource LabelForeground}" />
+                            <ComboBox Height="22" x:Name="groupCombobox" Tag="{Binding SelectedGroupText,Mode=TwoWay}" Background="{DynamicResource WhiteBrush}" BorderBrush="{DynamicResource DropDownBorderBrush}" Grid.Column="1" Margin="{DynamicResource MarginFromLabel}"
+                                  Style="{DynamicResource RefrenceFrameComboBoxStyle}" ItemTemplate="{DynamicResource ReferenceItemTemplate}" ItemsSource="{Binding ReferenceGroups}"  ItemContainerStyle="{DynamicResource ReferanceItemStyle}" IsEnabled="{Binding IsReferenceGroupEnabled,Mode= TwoWay}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="DropDownOpened" SourceName="groupCombobox">
+                                        <i:InvokeCommandAction x:Name="RefreshGroupDropDownCommand" 
+                                                       Command="{Binding RefreshGroupDropDownCommand}" 
+                                                       CommandParameter="{Binding SelectedItem, ElementName=groupCombobox}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </ComboBox>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+                <TabControl ItemContainerStyle="{DynamicResource LayerPropertyTabItemStyle}" Grid.Row="2" Margin="0,0,0,5" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Background="White" Padding="0" SelectedIndex="{Binding Path=SelectedTabIndex, Mode=TwoWay}">
+                    <TabItem Header="{Binding Path=MapColumns, Source={StaticResource ResourceKeyStrings}}" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" >
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                                <StackPanel>
+                                    <DataGrid ScrollViewer.HorizontalScrollBarVisibility="Disabled" x:Name="MapColGrid" HorizontalContentAlignment="Stretch"  HorizontalGridLinesBrush="#FFD4D4D4" VerticalGridLinesBrush="#FFD6D6D6" AutoGenerateColumns="False" 
+                                           ItemsSource="{Binding ColumnsView,Mode=TwoWay}" CellStyle="{DynamicResource DataGridCellStyle}" CanUserAddRows="False" SelectionUnit="Cell"
+                                           RowDetailsVisibilityMode="Collapsed" RowHeaderWidth="0" Background="White" BorderBrush="{x:Null}" CanUserDeleteRows="False" CanUserSortColumns="False"  >
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger SourceObject="{Binding ElementName=MapColGrid}" EventName="SizeChanged">
+                                                <ei:ChangePropertyAction TargetName="FirstRowColumn" PropertyName="Width">
+                                                    <ei:ChangePropertyAction.Value>
+                                                        <DataGridLength>*</DataGridLength>
+                                                    </ei:ChangePropertyAction.Value>
+                                                </ei:ChangePropertyAction>
+                                                <ei:ChangePropertyAction TargetName="WWTLabelColumn" PropertyName="Width">
+                                                    <ei:ChangePropertyAction.Value>
+                                                        <DataGridLength>*</DataGridLength>
+                                                    </ei:ChangePropertyAction.Value>
+                                                </ei:ChangePropertyAction>
+                                            </i:EventTrigger>
+                                            <i:EventTrigger SourceObject="{Binding ElementName=MapColGrid}" EventName="Loaded">
+                                                <ei:ChangePropertyAction TargetName="FirstRowColumn" PropertyName="Width">
+                                                    <ei:ChangePropertyAction.Value>
+                                                        <DataGridLength>*</DataGridLength>
+                                                    </ei:ChangePropertyAction.Value>
+                                                </ei:ChangePropertyAction>
+                                                <ei:ChangePropertyAction TargetName="WWTLabelColumn" PropertyName="Width">
+                                                    <ei:ChangePropertyAction.Value>
+                                                        <DataGridLength>*</DataGridLength>
+                                                    </ei:ChangePropertyAction.Value>
+                                                </ei:ChangePropertyAction>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+
+                                        <DataGrid.Columns>
+                                            <DataGridTemplateColumn x:Name="FirstRowColumn" Header="{Binding Path=FirstRowData, Source={StaticResource ResourceKeyStrings}}" 
+                                                            Width="*">
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Margin="5,2" Text="{Binding ExcelHeaderColumn,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                            </DataGridTemplateColumn>
+                                            <DataGridTemplateColumn x:Name="WWTLabelColumn" Header="{Binding Path=WWTLabel, Source={StaticResource ResourceKeyStrings}}"  
+                                                                    Width="*">
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <ComboBox x:Name="WWTLabelCombo" Style="{DynamicResource ComboBoxStyle}" Background="White" BorderThickness="0" 
+                                                              BorderBrush="Transparent" ItemsSource="{Binding WWTColumns}"
+                                                              SelectedItem="{Binding Path=SelectedWWTColumn,Mode=TwoWay, UpdateSourceTrigger= PropertyChanged}">
+                                                            <ComboBox.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <TextBlock Text="{Binding Path=ColumnDisplayValue}"></TextBlock>
+                                                                </DataTemplate>
+                                                            </ComboBox.ItemTemplate>
+
+                                                            <i:Interaction.Triggers>
+                                                                <i:EventTrigger EventName="SelectionChanged" SourceName="WWTLabelCombo">
+                                                                    <i:InvokeCommandAction x:Name="MapColumnCommand" 
+                                                                                       Command="{Binding MapColumnCommand}" 
+                                                                                       CommandParameter="{Binding SelectedItem,ElementName=WWTLabelCombo}"
+                                                                />
+                                                                </i:EventTrigger>
+                                                            </i:Interaction.Triggers>
+                                                        </ComboBox>
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                            </DataGridTemplateColumn>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                    <TextBlock Margin="5" Grid.Row="1" TextWrapping="Wrap" Text="{Binding Path=MapColumnFloatingText, Source={StaticResource ResourceKeyStrings}}" Foreground="#FF606060"/>
+                                </StackPanel>
+                            </ScrollViewer>
+                            <Border BorderBrush="#FF9D9D9D" BorderThickness="0,1,0,0" Grid.Row="2" Padding="0,4,0,4">
+                                <Border.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFEDEDED" Offset="0.004"/>
+                                        <GradientStop Color="White" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <StackPanel>
+                                    <Grid Margin="7,4,7,4" VerticalAlignment="Center" Visibility="{Binding IsDistanceVisible,Converter={StaticResource VisibilityConverter}}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="95"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock TextWrapping="Wrap" Text="{Binding Path=DistanceUnit, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource themablelabelTextBlockStyle}" VerticalAlignment="Center" Foreground="{DynamicResource LabelForeground}" Margin="0,0,10,0" />
+                                        <ComboBox Height="22" x:Name="DistanceUnitCombo" Grid.Column="1" d:LayoutOverrides="Height" Background="{DynamicResource WhiteBrush}" 
+                                                  BorderBrush="{DynamicResource DropDownBorderBrush}" ItemsSource="{Binding DistanceUnits}" SelectedItem="{Binding SelectedDistanceUnit,Mode=TwoWay}"
+                                                  Style="{StaticResource ScaleFactorComboBoxStyle}"
+                                                  Margin="{DynamicResource MarginFromLabel}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="SelectionChanged" SourceName="DistanceUnitCombo">
+                                                    <i:InvokeCommandAction x:Name="DistanceUnitCommand" Command="{Binding ControlCommand}" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Path=Value}"></TextBlock>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                            <ComboBox.ToolTip>
+                                                <TextBlock MaxWidth="400" TextWrapping="Wrap" Text="{Binding Path=DistanceUnitComboBoxToolTip, Source={StaticResource ResourceKeyStrings}}" />
+                                            </ComboBox.ToolTip>
+                                        </ComboBox>
+
+                                    </Grid>
+                                    <Grid Margin="7,4,7,4" VerticalAlignment="Center" Visibility="{Binding IsRAUnitVisible,Converter={StaticResource VisibilityConverter}}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="95"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock TextWrapping="Wrap" Text="{Binding Path=RAUnit, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource themablelabelTextBlockStyle}" VerticalAlignment="Center" Foreground="{DynamicResource LabelForeground}" Margin="0,0,10,0" />
+                                        <ComboBox Height="22" x:Name="RAUnitCombo" Grid.Column="1" d:LayoutOverrides="Height" Background="{DynamicResource WhiteBrush}"  Style="{StaticResource ScaleFactorComboBoxStyle}"
+                                                  BorderBrush="{DynamicResource DropDownBorderBrush}" ItemsSource="{Binding RightAscentionUnits}" SelectedItem="{Binding SelectedRAUnit,Mode=TwoWay}"
+                                                  Margin="{DynamicResource MarginFromLabel}" >
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="SelectionChanged" SourceName="RAUnitCombo">
+                                                    <i:InvokeCommandAction x:Name="RACommand" Command="{Binding ControlCommand}" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Path=Value}"></TextBlock>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                            <ComboBox.ToolTip>
+                                                <TextBlock MaxWidth="400" TextWrapping="Wrap" Text="{Binding Path=RAUnitComboboxToolTip, Source={StaticResource ResourceKeyStrings}}" />
+                                            </ComboBox.ToolTip>
+                                        </ComboBox>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Layer" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" x:Name="LayerTabItem" Selector.Selected="LayerTabItemSelected">
+                        <ScrollViewer Template="{DynamicResource MainContainerScrollViewerStyle}" VerticalScrollBarVisibility="Auto">
+                            <Grid >
+                                <StackPanel Margin="10,0">
+                                    <ContentControl Content="{Binding Path=LayerOpacity, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource GroupHeaderStyle}" Margin="0,10,0,0" Tag="{Binding Path=WhatsThisText, Source={StaticResource ResourceKeyStrings}}" ToolTip="{Binding Path=LayerOpacityToolTip, Source={StaticResource ResourceKeyStrings}}"/>
+                                    <StackPanel Orientation="Horizontal" Margin="{DynamicResource LayerInnerMargin}">
+                                        <TextBlock TextWrapping="Wrap" Text="{Binding LayerOpacity.MinimumValue}" Width="7" Height="16" Style="{DynamicResource themablelabelTextBlockStyle}" SnapsToDevicePixels="True"/>
+                                        <Slider x:Name="LayerOpacitySlider" Style="{DynamicResource OpacitySliderStyle}" Height="9" 
+                                                Maximum="{Binding LayerOpacity.MaximumValue}" TickFrequency="1"  IsSnapToTickEnabled="True"   Value="{Binding LayerOpacity.SelectedSliderValue,Mode=TwoWay}"
+                                                Width="150" Margin="5,0.75,5,0" SnapsToDevicePixels="True" Minimum="{Binding LayerOpacity.MinimumValue}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="ValueChanged" SourceName="LayerOpacitySlider">
+                                                    <i:InvokeCommandAction x:Name="LayerOpacityCommand" Command="{Binding ControlCommand}" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </Slider>
+                                        <TextBlock TextWrapping="Wrap" Text="{Binding LayerOpacity.MaximumValue}" Style="{DynamicResource themablelabelTextBlockStyle}" SnapsToDevicePixels="True"/>
+                                    </StackPanel>
+                                    <ContentControl Content="{Binding Path=LifeTime, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource GroupHeaderStyle}" Margin="0,5,0,0" Tag="{Binding Path=WhatsThisText, Source={StaticResource ResourceKeyStrings}}" ToolTip="{Binding Path=LifeTimeToolTip, Source={StaticResource ResourceKeyStrings}}"/>
+                                    <StackPanel Margin="{DynamicResource LayerInnerMargin}"  VerticalAlignment="Center" >
+                                        <TextBlock HorizontalAlignment="Left" Text="{Binding Path=BeginDate,Source={StaticResource ResourceKeyStrings}}"
+                                                   Style="{DynamicResource labelTBStyle}" />
+                                        <DatePicker Margin="0,2.5,0,0" Style="{DynamicResource DatePickerStyle}" SnapsToDevicePixels="True" 
+                                                    SelectedDate="{Binding BeginDate,Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+                                    </StackPanel>
+
+                                    <StackPanel Margin="{DynamicResource LayerInnerMargin}"  VerticalAlignment="Center" >
+                                        <TextBlock HorizontalAlignment="Left" Text="{Binding Path=EndDate,Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource labelTBStyle}" />
+                                        <DatePicker Margin="0,3,0,0" Style="{DynamicResource DatePickerStyle}" 
+                                                    SelectedDate="{Binding EndDate,Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+                                    </StackPanel>
+                                    <StackPanel Margin="{DynamicResource LayerInnerMargin}"  VerticalAlignment="Center" >
+                                        <TextBlock HorizontalAlignment="Left" Text="{Binding Path=FadeType, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource labelTBStyle}" />
+                                        <ComboBox x:Name="FadeTypeCombo" Grid.Column="1" d:LayoutOverrides="Height" Background="{DynamicResource WhiteBrush}"
+                                                  BorderBrush="{DynamicResource DropDownBorderBrush}" Margin="0,3,0,0" ItemsSource="{Binding FadeTypes}"
+                                                 SelectedItem="{Binding SelectedFadeType,Mode=TwoWay}" >
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="SelectionChanged" SourceName="FadeTypeCombo">
+                                                    <i:InvokeCommandAction x:Name="FadeTypeCommand" Command="{Binding ControlCommand}" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Path=Value}"></TextBlock>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                            <ComboBox.ToolTip>
+                                                <TextBlock MaxWidth="400" TextWrapping="Wrap" Text="{Binding Path=FadeTypeComboBoxToolTip, Source={StaticResource ResourceKeyStrings}}" />
+                                            </ComboBox.ToolTip>
+                                        </ComboBox>
+                                    </StackPanel>
+                                    <StackPanel Margin="{DynamicResource LayerInnerMargin}"  VerticalAlignment="Center" >
+                                        <TextBlock HorizontalAlignment="Left"  
+                                                   Text="{Binding Path=FadeTime, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource labelTBStyle}">
+                                        </TextBlock>
+                                        <TextBox  x:Name="FadeTimeText" Grid.Column="1"  Text="{Binding FadeTime,Mode=TwoWay}" Margin="0,3,0,0">
+                                            <TextBox.ToolTip>
+                                                <TextBlock MaxWidth="400" TextWrapping="Wrap" Text="{Binding Path=FadeTimeTextBoxToolTip, Source={StaticResource ResourceKeyStrings}}" />
+                                            </TextBox.ToolTip>
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="LostKeyboardFocus">
+                                                    <i:InvokeCommandAction x:Name="FadeTimeLostKeyboardFocusCommand" 
+                                                    Command="{Binding FadeTimeChangeCommand}" 
+                                                    CommandParameter="{Binding Text,ElementName=FadeTimeText}"/>
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </TextBox>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+                        </ScrollViewer>
+                    </TabItem>
+                    <TabItem Header="Marker" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" IsEnabled="{Binding IsMarkerTabEnabled}" x:Name="MarkerTabItem" Selector.Selected="MarkerTabItemSelected">
+                        <ScrollViewer Template="{DynamicResource MainContainerScrollViewerStyle}" VerticalScrollBarVisibility="Auto">
+                            <Grid IsEnabled="{Binding IsMarkerTabEnabled}">
+                                <StackPanel Margin="10,0">
+                                    <ContentControl Content="{Binding Path=Color, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource GroupHeaderStyle}" Margin="0,10,0,0" Tag="{Binding Path=WhatsThisText, Source={StaticResource ResourceKeyStrings}}" ToolTip="{Binding Path=ColorToolTip, Source={StaticResource ResourceKeyStrings}}"/>
+                                    <StackPanel Orientation="Horizontal" Margin="{DynamicResource LayerInnerMargin}">
+                                        <Button x:Name="ColorPallet" Width="30" Height="18" Style="{DynamicResource ColorPickerButtonStyle}" Background="{Binding ColorBackground}" >
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="Click" SourceName="ColorPallet">
+                                                    <i:InvokeCommandAction x:Name="ColorPalletCommand" 
+                                                    Command="{Binding ColorPalletCommand}" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </Button>
+                                    </StackPanel>
+                                    <ContentControl Content="{Binding Path=HoverText, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource GroupHeaderStyle}" Margin="0,5,0,0" Tag="{Binding Path=WhatsThisText, Source={StaticResource ResourceKeyStrings}}" ToolTip="{Binding Path=HoverTextToolTip, Source={StaticResource ResourceKeyStrings}}"/>
+                                    <StackPanel Margin="{DynamicResource LayerInnerMargin}"  VerticalAlignment="Center" >
+                                        <TextBlock HorizontalAlignment="Left" Text="{Binding Path=HoverTextColumn, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource labelTBStyle}" />
+                                        <ComboBox x:Name="HoverTextCombo" Grid.Column="1" d:LayoutOverrides="Height" Background="{DynamicResource WhiteBrush}" SelectedItem="{Binding SelectedHoverText,Mode=TwoWay}"
+                                                  BorderBrush="{DynamicResource DropDownBorderBrush}" ItemsSource="{Binding HoverTextColumnList}" Margin="0,3,0,0">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="SelectionChanged" SourceName="HoverTextCombo">
+                                                    <i:InvokeCommandAction x:Name="HoverTextCommand" Command="{Binding ControlCommand}" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Path=Value}"></TextBlock>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                    </StackPanel>
+                                    <ContentControl Content="{Binding Path=Scaling, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource GroupHeaderStyle}" Margin="0,5,0,0" Tag="{Binding Path=WhatsThisText, Source={StaticResource ResourceKeyStrings}}" ToolTip="{Binding Path=ScalingTooltip, Source={StaticResource ResourceKeyStrings}}"/>
+                                    <StackPanel Margin="{DynamicResource LayerInnerMargin}"  VerticalAlignment="Center" >
+                                        <TextBlock HorizontalAlignment="Left" Text="{Binding Path=ScaleType, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource labelTBStyle}" />
+                                        <ComboBox x:Name="ScaleTypeCombo" Grid.Column="1" d:LayoutOverrides="Height"
+                                                ItemsSource="{Binding ScaleTypes}"  SelectedItem="{Binding SelectedScaleType,Mode=TwoWay}"  Background="{DynamicResource WhiteBrush}" BorderBrush="{DynamicResource DropDownBorderBrush}" Margin="0,3,0,0">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="SelectionChanged" SourceName="ScaleTypeCombo">
+                                                    <i:InvokeCommandAction x:Name="ScaleTypeCommand" Command="{Binding ControlCommand}" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Path=Value}"></TextBlock>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                    </StackPanel>
+                                    <StackPanel Margin="{DynamicResource LayerInnerMargin}"  VerticalAlignment="Center" >
+                                        <TextBlock x:Name="SizeColumnCombo" HorizontalAlignment="Left" Text="{Binding Path=SizeColumn, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource labelTBStyle}" />
+                                        <ComboBox x:Name="SizeColumnCombobox" Grid.Column="1" d:LayoutOverrides="Height" Background="{DynamicResource WhiteBrush}" Style="{StaticResource ScaleFactorComboBoxStyle}"
+                                                  BorderBrush="{DynamicResource DropDownBorderBrush}" ItemsSource="{Binding SizeColumnList}" SelectedItem="{Binding SelectedSize,Mode=TwoWay}"
+                                                  Margin="0,3,0,0" >
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="SelectionChanged" SourceName="SizeColumnCombobox">
+                                                    <i:InvokeCommandAction x:Name="SizeColumnCommand" Command="{Binding SizeColumnChangeCommand}" 
+                                                                          CommandParameter="{Binding SelectedItem, ElementName=SizeColumnCombobox}" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Path=Value}"></TextBlock>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                    </StackPanel>
+                                    <StackPanel Margin="{DynamicResource LayerInnerMargin}"  VerticalAlignment="Center" >
+                                        <TextBlock HorizontalAlignment="Left" Text="{Binding Path=ScaleRelative, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource labelTBStyle}" />
+                                        <ComboBox x:Name="ScaleRelativeCombo" Grid.Column="1" d:LayoutOverrides="Height" Background="{DynamicResource WhiteBrush}"
+                                                  BorderBrush="{DynamicResource DropDownBorderBrush}" Margin="0,3,0,0" ItemsSource="{Binding ScaleRelatives}"
+                                                  SelectedItem="{Binding SelectedScaleRelative,Mode=TwoWay}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="SelectionChanged" SourceName="ScaleRelativeCombo">
+                                                    <i:InvokeCommandAction x:Name="ScaleRelativeCommand" Command="{Binding ControlCommand}"/>
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Path=Value}"></TextBlock>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                    </StackPanel>
+                                    <StackPanel Margin="{DynamicResource LayerInnerMargin}"  VerticalAlignment="Center" >
+                                        <TextBlock HorizontalAlignment="Left" Text="{Binding Path=ScaleFactor, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource labelTBStyle}" />
+                                        <StackPanel Margin="{DynamicResource LayerInnerMargin}"  VerticalAlignment="Center" >
+                                            <Slider  x:Name="ScaleFactorSlider" Style="{DynamicResource TimeDecaySlider}"  IsSnapToTickEnabled="True"  
+                                                 Height="9" Margin="-5,0,5,0" Value="{Binding ScaleFactor.SelectedSliderValue, Mode=TwoWay}" 
+                                               HorizontalAlignment="Stretch" Minimum="1" Maximum="25"  >
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="ValueChanged" SourceName="ScaleFactorSlider">
+                                                        <i:InvokeCommandAction x:Name="ScaleFactorCommand" Command="{Binding ControlCommand}" />
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </Slider>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <ContentControl Content="{Binding Path=MarkerSubHeader, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource GroupHeaderStyle}" Margin="0,0,0,0" Tag="{Binding Path=WhatsThisText, Source={StaticResource ResourceKeyStrings}}" ToolTip="{Binding Path=MarkerToolTip, Source={StaticResource ResourceKeyStrings}}"/>
+                                    <StackPanel Margin="{DynamicResource LayerInnerMargin}"  VerticalAlignment="Center" >
+                                        <TextBlock HorizontalAlignment="Left" Text="{Binding Path=MarkerTypeLabel, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource labelTBStyle}" />
+                                        <ComboBox x:Name="MarkerTypeCombo"  Grid.Column="0" d:LayoutOverrides="Height" VerticalAlignment="Center"
+                                                ItemsSource="{Binding MarkerTypes}" SelectedItem="{Binding SelectedMarkerType,Mode=TwoWay}"  Background="{DynamicResource WhiteBrush}" BorderBrush="{DynamicResource DropDownBorderBrush}" Margin="0,3,0,0">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="SelectionChanged" SourceName="MarkerTypeCombo">
+                                                    <i:InvokeCommandAction x:Name="MarkerTypeCommand" Command="{Binding ControlCommand}"/>
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Path=Value}"></TextBlock>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                        <TextBlock Margin="0,5,0,5" HorizontalAlignment="Left" Text="{Binding Path=SelectMarkerLabel, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource labelTBStyle}" Visibility="{Binding Path=PushpinMarkerTypeSelected, Mode=TwoWay, Converter={StaticResource VisibilityConverter}}" />
+                                        <ComboBox UseLayoutRounding="True" SnapsToDevicePixels="True" x:Name="PushpinCombo" 
+                                                  Margin="0,3,0,0" Style="{DynamicResource PushPinDropDownStyle}" MaxDropDownHeight="267"
+                                                  ItemContainerStyle="{DynamicResource PushPinDropDownItemStyle}"
+                                                   ItemsSource="{Binding PushPinTypes}" VerticalAlignment="Top" HorizontalAlignment="Left"
+                                                  ItemsPanel="{DynamicResource PushpinItemPanelTemplate}"
+                                                  ItemTemplate="{DynamicResource PushpinItemTemplate}"
+                                                  SelectedItem="{Binding SelectedPushpinId,Mode=TwoWay}"
+                                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                  Visibility="{Binding Path=PushpinMarkerTypeSelected, Mode=TwoWay, Converter={StaticResource VisibilityConverter}}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="SelectionChanged" SourceName="PushpinCombo">
+                                                    <i:InvokeCommandAction x:Name="PushPinCommand" Command="{Binding ControlCommand}"/>
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </ComboBox>
+                                    </StackPanel>
+                                    <CheckBox x:Name="showFarSideCheckbox"  Content="{Binding Path=ShowFarSideCheckbox, Source={StaticResource ResourceKeyStrings}}" Margin="{DynamicResource LayerInnerMargin}"  VerticalAlignment="Center" IsChecked="{Binding IsFarSideShown, Mode=TwoWay}" >
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="Checked" SourceName="showFarSideCheckbox">
+                                                <i:InvokeCommandAction x:Name="ShowFarSideCommand" Command="{Binding ControlCommand}"/>
+                                            </i:EventTrigger>
+                                            <i:EventTrigger EventName="Unchecked" SourceName="showFarSideCheckbox">
+                                                <i:InvokeCommandAction x:Name="ShowFarSideUncheckedCommand" Command="{Binding ControlCommand}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </CheckBox>
+                                    <ContentControl Content="{Binding Path=TimeDecay, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource GroupHeaderStyle}" Margin="0,5,0,0" Tag="{Binding Path=WhatsThisText, Source={StaticResource ResourceKeyStrings}}" ToolTip="{Binding Path=TimeDecayToolTip, Source={StaticResource ResourceKeyStrings}}"/>
+                                    <StackPanel Margin="{DynamicResource LayerInnerMargin}"  VerticalAlignment="Center" >
+                                        <Slider  x:Name="TimeDecaySlider" Style="{DynamicResource TimeDecaySlider}"  IsSnapToTickEnabled="True"
+                                                 Height="9" Maximum="25" Minimum="1"  Margin="-5,0.5,5,0" Value="{Binding TimeDecay.SelectedSliderValue}"
+                                                 HorizontalAlignment="Stretch"  TickFrequency="1" >
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="ValueChanged" SourceName="TimeDecaySlider">
+                                                    <i:InvokeCommandAction x:Name="TimeDecayCommand" Command="{Binding ControlCommand}" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </Slider>
+                                    </StackPanel>
+                                    <ContentControl Content="{Binding Path=CrashWarningSubHeader, Source={StaticResource ResourceKeyStrings}}" Style="{DynamicResource GroupHeaderStyle}" Margin="0,5,0,0" Tag="{Binding Path=WhatsThisText, Source={StaticResource ResourceKeyStrings}}" ToolTip="{Binding Path=CrashWarningToolTip, Source={StaticResource ResourceKeyStrings}}"/>
+                                    <CheckBox x:Name="crashWarningAlertsCheckbox"  Content="{Binding Path=CrashWarningAlertsCheckbox, Source={StaticResource ResourceKeyStrings}}" Margin="{DynamicResource LayerInnerMargin}"  VerticalAlignment="Center" IsChecked="{Binding IsRenderingTimeoutAlertShown, Mode=TwoWay}" >
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="Checked" SourceName="crashWarningAlertsCheckbox">
+                                                <i:InvokeCommandAction x:Name="CrashWarningAlertCheckedCommand" Command="{Binding ControlCommand}"/>
+                                            </i:EventTrigger>
+                                            <i:EventTrigger EventName="Unchecked" SourceName="crashWarningAlertsCheckbox">
+                                                <i:InvokeCommandAction x:Name="CrashWarningAlertUncheckedCommand" Command="{Binding ControlCommand}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </CheckBox>
+                                </StackPanel>
+                            </Grid>
+                        </ScrollViewer>
+                    </TabItem>
+                </TabControl>
+
+                <Border x:Name="ViewWWTContainer" BorderThickness="1" Grid.Row="3" Height="50" IsEnabled="{Binding Path=IsViewInWWTEnabled, Mode=TwoWay}" >
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="1" x:Name="ViewInWWTButton" Content="{Binding Path=ViewInWWT, Source={StaticResource ResourceKeyStrings}}" Width="88" Height="22" HorizontalAlignment="Right"  Margin="0,3,0,3">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click" SourceName="ViewInWWTButton">
+                                    <i:InvokeCommandAction x:Name="ViewInWWTCommand" 
+                                                    Command="{Binding ViewInWWTCommand}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <Button.ToolTip>
+                                <TextBlock MaxWidth="400" TextWrapping="Wrap" Text="{Binding Path=ViewInWWTCallOutText, Source={StaticResource ResourceKeyStrings}}" />
+                            </Button.ToolTip>
+                        </Button>
+                        <Grid Grid.ColumnSpan="2" Opacity="0" x:Name="callOutGrid" Margin="5.5,-26.5,90,15" Height="50" Visibility="{Binding IsCallOutVisible,Converter={StaticResource VisibilityConverter}}" RenderTransformOrigin="0.5,0.5">
+                            <Grid.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform/>
+                                    <TranslateTransform X="-25"/>
+                                </TransformGroup>
+                            </Grid.RenderTransform>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.998*"/>
+                                <ColumnDefinition Width="0.002*"/>
+                            </Grid.ColumnDefinitions>
+                            <Rectangle x:Name="rectangle" Stroke="#FF313131" RadiusX="2" RadiusY="2">
+                                <Rectangle.Effect>
+                                    <DropShadowEffect BlurRadius="18" ShadowDepth="1" Opacity="0"/>
+                                </Rectangle.Effect>
+                                <Rectangle.Fill>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FF4E6683" Offset="0.073"/>
+                                        <GradientStop Color="#FF5F738B" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <Path Data="M0.5,2.5 C0.5,1.3954305 1.3954305,0.5 2.5,0.5 L169.156,0.5 C170.26057,0.5 171.156,1.3954305 171.156,2.5 139.21092,8.2924528 85.697168,14.9197 58.787952,21.993182 38.097347,27.432011 2.5,49.5 2.5,49.5 1.3954305,49.5 0.5,48.604569 0.5,47.5 z" Stretch="Fill" Opacity="0.5" >
+                                <Path.Fill>
+                                    <LinearGradientBrush EndPoint="0.344,0.438" StartPoint="0.346,0.027">
+                                        <GradientStop Offset="0" Color="#4EFFFFFF"/>
+                                        <GradientStop Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Path.Fill>
+                            </Path>
+                            <TextBlock TextWrapping="Wrap" Text="{Binding Path=ViewInWWTCallOutText, Source={StaticResource ResourceKeyStrings}}" Foreground="White" 
+                                       FontSize="10.667" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="5,2,12,2"/>
+                            <Path x:Name="path" Data="M173.24151,30.68355 L181.31453,40.616636 173.19569,40.662036" Height="10.978" Margin="-1.5,0,-7.269,8.338" Stretch="Fill" Stroke="#FF313131" VerticalAlignment="Bottom" Grid.Column="1">
+                                <Path.Fill>
+
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FF4E6683" Offset="0.073"/>
+                                        <GradientStop Color="#FF5F738B" Offset="1"/>
+                                    </LinearGradientBrush>
+
+                                </Path.Fill>
+                            </Path>
+
+                            <Button x:Name="callOutButton" Content="Button" HorizontalAlignment="Right" Height="12" Margin="0,1,0.65,0" Style="{DynamicResource CalloutClosebutton}" VerticalAlignment="Top" Width="12">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Click" SourceName="callOutButton">
+                                        <i:InvokeCommandAction x:Name="callOutCommand" Command="{Binding CallOutCommand}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </Button>
+                        </Grid>
+                        <Border x:Name="border" Margin="0,-5,0,0" CornerRadius="5" Background="#00FFF8E5" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" Visibility="{Binding IsLayerInSyncInfoVisible, Converter={StaticResource VisibilityConverter}}" >
+                            <Border.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Border.RenderTransform>
+                            <Grid>
+                                <Rectangle x:Name="ViewAlertBG" Stroke="#FFD6B381" RadiusX="2" RadiusY="2" UseLayoutRounding="True" RenderTransformOrigin="0.5,0.5" Opacity="0">
+                                    <Rectangle.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Rectangle.RenderTransform>
+                                    <Rectangle.Effect>
+                                        <DropShadowEffect BlurRadius="7" ShadowDepth="4" Opacity="0"/>
+                                    </Rectangle.Effect>
+                                    <Rectangle.Fill>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="#FFFFF5D9"/>
+                                            <GradientStop Color="#FFFFFCE5" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                                <TextBlock Margin="3" TextWrapping="Wrap" Text="{Binding Path=LayerInSyncInfoText, Source={StaticResource ResourceKeyStrings}}" Foreground="#FF005368" FontSize="10" TextTrimming="CharacterEllipsis" d:LayoutOverrides="Height" VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+
+</UserControl>

@@ -1,0 +1,102 @@
+﻿<Window x:Class="Microsoft.Research.Wwt.Excel.Addin.FetchClimateView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ResourceString="clr-namespace:Microsoft.Research.Wwt.Excel.Addin.Properties" 
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
+        x:Name="Window"
+        xmlns:local="clr-namespace:Microsoft.Research.Wwt.Excel.Addin"
+        WindowStartupLocation="CenterOwner" 
+        Title="{x:Static ResourceString:Resources.FetchClimateViewText}"
+        WindowStyle="ToolWindow" Width="380" Height="290" Background="{DynamicResource WindowbackgroundBrush}">
+    
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Resources/Style/Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <ResourceString:Resources x:Key="ResourceKeyStrings"></ResourceString:Resources>
+            <BooleanToVisibilityConverter x:Key="VisibilityConverter"></BooleanToVisibilityConverter>
+            <local:DoubleToStringConverter x:Key="doubleConverter"></local:DoubleToStringConverter>
+            <Style x:Key="getViewpointlableStyle" TargetType="{x:Type TextBlock}">
+                <Setter Property="TextWrapping" Value="NoWrap"/>
+                <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                <Setter Property="FontFamily" Value="Segoe UI"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="Foreground" Value="#FF002144"/>
+                <Setter Property="Margin" Value="10,2,10,2"/>
+                <Setter Property="MinWidth" Value="100"/>
+            </Style>
+
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <Border Grid.Row="1" BorderThickness="1" Background="{DynamicResource WhitBrush}" Margin="0,5,0,0" BorderBrush="{DynamicResource LightgrayBorderBrush}" ClipToBounds="True" UseLayoutRounding="True">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock  Text="Min Latitude" Style="{DynamicResource getViewpointlableStyle}" />
+                    <Rectangle Width="1" Fill="#FFDADADA"/>
+                    <TextBox Text="{Binding FetchClimateInputs.MinLatitude,Mode=TwoWay,Converter={StaticResource doubleConverter}}" Width="100" Margin="5"></TextBox>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock  Text="Max Latitude" Style="{DynamicResource getViewpointlableStyle}" />
+                    <Rectangle Width="1" Fill="#FFDADADA"/>
+                    <TextBox  Text="{Binding FetchClimateInputs.MaxLatitude,Mode=TwoWay,Converter={StaticResource doubleConverter}}"  Width="100" Margin="5"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock  Text="Min Longitude" Style="{DynamicResource getViewpointlableStyle}" />
+                    <Rectangle Width="1" Fill="#FFDADADA"/>
+                    <TextBox  Text="{Binding FetchClimateInputs.MinLongitude,Mode=TwoWay,Converter={StaticResource doubleConverter}}"  Width="100" Margin="5" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock  Text="Max Longitude" Style="{DynamicResource getViewpointlableStyle}" />
+                    <Rectangle Width="1" Fill="#FFDADADA"/>
+                    <TextBox  Text="{Binding FetchClimateInputs.MaxLongitude,Mode=TwoWay,Converter={StaticResource doubleConverter}}"  Width="100" Margin="5" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock  Text="Delta Latitude" Style="{DynamicResource getViewpointlableStyle}" />
+                    <Rectangle Width="1" Fill="#FFDADADA"/>
+                    <TextBox  Text="{Binding FetchClimateInputs.DeltaLatitude,Mode=TwoWay,Converter={StaticResource doubleConverter}}"  Width="100" Margin="5" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock  Text="Delta Longitude" Style="{DynamicResource getViewpointlableStyle}" />
+                    <Rectangle Width="1" Fill="#FFDADADA"/>
+                    <TextBox  Text="{Binding FetchClimateInputs.DeltaLongitude,Mode=TwoWay,Converter={StaticResource doubleConverter}}"  Width="100" Margin="5"/>
+                </StackPanel>
+
+            </StackPanel>
+
+        </Border>
+        <StackPanel  HorizontalAlignment="Right" Grid.Row="2" VerticalAlignment="Top" Orientation="Horizontal" Margin="{DynamicResource ButtonContainerMargin}">
+            <Button x:Name="fetchButton" Content="{Binding Path=FetchButtonLabel, Source={StaticResource ResourceKeyStrings}}" Width="75" IsEnabled="True" IsDefault="True" IsCancel="False">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click" SourceName="fetchButton">
+                        <i:InvokeCommandAction x:Name="fetchClimate" 
+                                                Command="{Binding FetchClimateCommand}" 
+                                                CommandParameter="{Binding SelectedItem,ElementName=fetchButton}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+            <Button x:Name="cancelButton" Content="{Binding Path=CancelLabel, Source={StaticResource ResourceKeyStrings}}" Width="75" Margin="8,0,0,0" IsCancel="True">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click" SourceName="cancelButton">
+                        <i:InvokeCommandAction x:Name="cancel" Command="{Binding CancelCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+        </StackPanel>
+    </Grid>
+
+</Window>

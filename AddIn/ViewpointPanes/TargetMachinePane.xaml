@@ -1,0 +1,46 @@
+﻿<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Class="Microsoft.Research.Wwt.Excel.Addin.TargetMachinePane"
+    xmlns:ResourceString="clr-namespace:Microsoft.Research.Wwt.Excel.Addin.Properties" 
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
+    x:Name="Window"
+    WindowStartupLocation="CenterOwner" 
+    Title="{x:Static ResourceString:Resources.TargetMachineButtonLabel}"
+    Background="{DynamicResource WindowbackgroundBrush}" MinWidth="255" MinHeight="190" MaxWidth="255" MaxHeight="190" WindowStyle="ToolWindow">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Resources/Style/Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <ResourceString:Resources x:Key="ResourceKeyStrings"></ResourceString:Resources>
+        </ResourceDictionary>
+    </Window.Resources>
+    
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ContentControl Content="/Microsoft.Research.Wwt.Excel.Addin;component/Resources/Images/Network.png" Style="{DynamicResource WindowHeaderStyle}" Tag="{Binding Path=TargetMachineLabel, Source={StaticResource ResourceKeyStrings}}" IsTabStop="False" />
+        <StackPanel x:Name="ContentGrid" Grid.Row="1" Margin="{DynamicResource ContentMargin}">
+            <TextBlock Text="{Binding Path=MachineNameLabel, Source={StaticResource ResourceKeyStrings}}"   Style="{DynamicResource LabelTextblockStyle}"/>
+            <TextBox x:Name="targetMachine" Text="{Binding Path=Name}" VerticalAlignment="Top" Margin="0,10,0,0" BorderBrush="{DynamicResource TextboxBorderBrush}" TextWrapping="NoWrap" AcceptsReturn="False" MaxLength="50" MaxLines="1"/>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Right" Grid.Row="2" VerticalAlignment="Top" Orientation="Horizontal" Margin="{DynamicResource ButtonContainerMargin}">
+            <Button  x:Name="saveButton"   Content="{Binding Path=SaveButtonLabel, Source={StaticResource ResourceKeyStrings}}" Width="75" IsDefault="True" >
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click" SourceName="saveButton">
+                        <i:InvokeCommandAction x:Name="machineNameChange" 
+                                               Command="{Binding MachineNameChangedCommand}" 
+                                               CommandParameter="{Binding Text,ElementName=targetMachine}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+            <Button Content="{Binding Path=CancelLabel, Source={StaticResource ResourceKeyStrings}}" Width="75" Margin="8,0,0,0" IsCancel="True"/>
+        </StackPanel>
+    </Grid>
+</Window>

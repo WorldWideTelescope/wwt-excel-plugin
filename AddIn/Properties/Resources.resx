@@ -1,0 +1,1050 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AltitudeComparision1" xml:space="preserve">
+    <value>Alt</value>
+  </data>
+  <data name="AltitudeDisplayValue" xml:space="preserve">
+    <value>Altitude</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Arrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\Arrow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Azimuth" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\Azimuth.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="BeginDate" xml:space="preserve">
+    <value>Layer Visibility Begin Date</value>
+  </data>
+  <data name="Calendar" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\Calendar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>Color</value>
+  </data>
+  <data name="ColorDisplayValue" xml:space="preserve">
+    <value>Color</value>
+  </data>
+  <data name="ColorToolTip" xml:space="preserve">
+    <value>Color of the markers that will represent the data being visualized</value>
+  </data>
+  <data name="DefaultErrorMessage" xml:space="preserve">
+    <value>An error has occurred while performing the current operation. Please try again.
+
+If this issue persists, please restart Excel and try again.</value>
+  </data>
+  <data name="DeleteMapping" xml:space="preserve">
+    <value>Delete Layer</value>
+  </data>
+  <data name="DeleteMappings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\DeleteMappings.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DepthDisplayValue" xml:space="preserve">
+    <value>Depth</value>
+  </data>
+  <data name="DistanceAstronomicalUnits" xml:space="preserve">
+    <value>Astronomical Units</value>
+  </data>
+  <data name="DistanceFeet" xml:space="preserve">
+    <value>Feet</value>
+  </data>
+  <data name="DistanceInches" xml:space="preserve">
+    <value>Inches</value>
+  </data>
+  <data name="DistanceKiloMeters" xml:space="preserve">
+    <value>Kilometers</value>
+  </data>
+  <data name="DistanceLightYears" xml:space="preserve">
+    <value>Light Years</value>
+  </data>
+  <data name="DistanceMegaParsecs" xml:space="preserve">
+    <value>Mega Parsecs</value>
+  </data>
+  <data name="DistanceMeters" xml:space="preserve">
+    <value>Meters</value>
+  </data>
+  <data name="DistanceMiles" xml:space="preserve">
+    <value>Miles</value>
+  </data>
+  <data name="DistanceParsecs" xml:space="preserve">
+    <value>Parsecs</value>
+  </data>
+  <data name="DistanceUnit" xml:space="preserve">
+    <value>Distance Units</value>
+  </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>Layer Visibility End Date</value>
+  </data>
+  <data name="EndDateComparision1" xml:space="preserve">
+    <value>EndDate</value>
+  </data>
+  <data name="EndDateComparision2" xml:space="preserve">
+    <value>End Time</value>
+  </data>
+  <data name="EndDateComparision3" xml:space="preserve">
+    <value>EndTime</value>
+  </data>
+  <data name="EndDateComparision4" xml:space="preserve">
+    <value>End</value>
+  </data>
+  <data name="EndDateDisplayValue" xml:space="preserve">
+    <value>End Date</value>
+  </data>
+  <data name="FadeBoth" xml:space="preserve">
+    <value>Both</value>
+  </data>
+  <data name="FadeIn" xml:space="preserve">
+    <value>In</value>
+  </data>
+  <data name="FadeNone" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="FadeOut" xml:space="preserve">
+    <value>Out</value>
+  </data>
+  <data name="FadeTime" xml:space="preserve">
+    <value>Fade Time</value>
+  </data>
+  <data name="FadeType" xml:space="preserve">
+    <value>Fade Type</value>
+  </data>
+  <data name="FirstRowData" xml:space="preserve">
+    <value>Data In The First Row</value>
+  </data>
+  <data name="GeometryComparision1" xml:space="preserve">
+    <value>Geo</value>
+  </data>
+  <data name="GeometryDisplayValue" xml:space="preserve">
+    <value>Geometry</value>
+  </data>
+  <data name="GetLayerData" xml:space="preserve">
+    <value>Get Layer Data</value>
+  </data>
+  <data name="GetLayerData1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\GetLayerData.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="GetPerspective" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\GetPerspective.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HelpInfo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\HelpInfo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HelpInfoText1" xml:space="preserve">
+    <value>Select a layer to view the mappings/properties of WorldWide Telescope layers. This includes layers stored locally in this file.</value>
+  </data>
+  <data name="HelpInfoText2" xml:space="preserve">
+    <value>To create a layer, select the range of cells that contain the data you want to visualize and hit the “Visualize Selection” button in the ribbon under the “WWT” tab.</value>
+  </data>
+  <data name="HoverText" xml:space="preserve">
+    <value>Hover Text</value>
+  </data>
+  <data name="HoverTextColumn" xml:space="preserve">
+    <value>Hover Text Column</value>
+  </data>
+  <data name="HoverTextToolTip" xml:space="preserve">
+    <value>The text that is displayed if the user hovers the mouse pointer over the graphic for an event</value>
+  </data>
+  <data name="InvalidSelectionRange" xml:space="preserve">
+    <value>The selection is not valid. Following are some rules for valid selections:
+1. Entire rows cannot be selected. Please select a range of cells or a continuous set of columns (for e.g. A through D).
+2. Discontinuous ranges of rows are allowed, however they must have the same columns.
+
+Hint: A shortcut to select an entire range is to select the top left cell of your data range and use ctrl+shift+right arrow+down arrow.</value>
+  </data>
+  <data name="Latitude" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\Latitude.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="LatitudeComparison1" xml:space="preserve">
+    <value>Lat</value>
+  </data>
+  <data name="LatitudeDisplayValue" xml:space="preserve">
+    <value>Latitude</value>
+  </data>
+  <data name="LayerLocalInWWTText" xml:space="preserve">
+    <value> (linked)</value>
+  </data>
+  <data name="LayerLocalText" xml:space="preserve">
+    <value> (not linked)</value>
+  </data>
+  <data name="LayerManager" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\LayerManager.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="LayerManagerPane" xml:space="preserve">
+    <value>Layer Manager</value>
+  </data>
+  <data name="LayerName" xml:space="preserve">
+    <value>Layer Name</value>
+  </data>
+  <data name="LayerOpacity" xml:space="preserve">
+    <value>Layer Opacity</value>
+  </data>
+  <data name="LayerOpacityToolTip" xml:space="preserve">
+    <value>Opacity of the layer that will be generated</value>
+  </data>
+  <data name="LayerOperationError" xml:space="preserve">
+    <value>An error has occurred while performing the current operation. Please try again.
+
+If this issue persists, please restart Excel and try again.</value>
+  </data>
+  <data name="LifeTime" xml:space="preserve">
+    <value>Lifetime</value>
+  </data>
+  <data name="LifeTimeToolTip" xml:space="preserve">
+    <value>The lifetime of a layer can be used to restrict the display of events in a long series of data.  For most short date range data setting a lifetime is probably unnecessary. The Fade information applies only to the begin and end of the lifetime of the layer, use the decay slider to fade individual events.</value>
+  </data>
+  <data name="LocalLayerName" xml:space="preserve">
+    <value>Local Layers</value>
+  </data>
+  <data name="Longitude" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\Longitude.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="LongitudeComparison1" xml:space="preserve">
+    <value>Lon</value>
+  </data>
+  <data name="LongitudeDisplayValue" xml:space="preserve">
+    <value>Longitude</value>
+  </data>
+  <data name="LookAngle" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\LookAngle.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MagnitudeComparision1" xml:space="preserve">
+    <value>Mag</value>
+  </data>
+  <data name="MagnitudeDisplayValue" xml:space="preserve">
+    <value>Magnitude</value>
+  </data>
+  <data name="MapColumnInfo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\MapColumnInfo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MapColumns" xml:space="preserve">
+    <value>Map Columns</value>
+  </data>
+  <data name="MessageBoxCaption" xml:space="preserve">
+    <value>WorldWide Telescope Add-in for Excel</value>
+  </data>
+  <data name="ViewpointsGroupLabel" xml:space="preserve">
+    <value>WWT Viewpoints</value>
+  </data>
+  <data name="NoneString" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="OnlyWWTLayerGotDeleted" xml:space="preserve">
+    <value>There was an error while processing the current operation. The error might be due to the following scenarios:
+1. The corresponding layer in WWT is deleted.
+2. WWT was closed while performing the operation.
+
+Please make sure the WWT application is open, and try again.</value>
+  </data>
+  <data name="RibbonLayerManagerButtonName" xml:space="preserve">
+    <value>Layer Manager</value>
+  </data>
+  <data name="RibbonTabName" xml:space="preserve">
+    <value>WWT</value>
+  </data>
+  <data name="RibbonVisualizeGroupName" xml:space="preserve">
+    <value>Visualize</value>
+  </data>
+  <data name="RibbonVisualizeSelectionButtonName" xml:space="preserve">
+    <value>Visualize Selection</value>
+  </data>
+  <data name="ScaleFactor" xml:space="preserve">
+    <value>Scale Factor</value>
+  </data>
+  <data name="ScaleRelative" xml:space="preserve">
+    <value>Scale Relative</value>
+  </data>
+  <data name="ScaleRelativeScreen" xml:space="preserve">
+    <value>Screen</value>
+  </data>
+  <data name="ScaleRelativeWorld" xml:space="preserve">
+    <value>World</value>
+  </data>
+  <data name="ScaleType" xml:space="preserve">
+    <value>Scale Type</value>
+  </data>
+  <data name="ScaleTypeConstant" xml:space="preserve">
+    <value>Constant</value>
+  </data>
+  <data name="ScaleTypeLinear" xml:space="preserve">
+    <value>Linear</value>
+  </data>
+  <data name="ScaleTypeLog" xml:space="preserve">
+    <value>Log</value>
+  </data>
+  <data name="ScaleTypePower" xml:space="preserve">
+    <value>Power</value>
+  </data>
+  <data name="Scaling" xml:space="preserve">
+    <value>Scaling</value>
+  </data>
+  <data name="ScalingTooltip" xml:space="preserve">
+    <value>Use the scale type to specify how you want the markers displayed. You can have markers display relative to the screen, invariant of your zoom, or have them scale relative to the coordinate system. You can optionally select a column to control the scale. Use the scale factor to adjust the relative unit values of the column to the output marker size</value>
+  </data>
+  <data name="SelectLayer" xml:space="preserve">
+    <value>Select Layer</value>
+  </data>
+  <data name="SelectOneString" xml:space="preserve">
+    <value>Select One</value>
+  </data>
+  <data name="SetLayerData" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\SetLayerData.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SetPerspective" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\SetPerspective.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ShowLayer" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\ShowLayer.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ShowRange" xml:space="preserve">
+    <value>Show Range</value>
+  </data>
+  <data name="SizeColumn" xml:space="preserve">
+    <value>Size Column</value>
+  </data>
+  <data name="StartDateComparision1" xml:space="preserve">
+    <value>StartDate</value>
+  </data>
+  <data name="StartDateComparision10" xml:space="preserve">
+    <value>DateTime</value>
+  </data>
+  <data name="StartDateComparision11" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="StartDateComparision12" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="StartDateComparision2" xml:space="preserve">
+    <value>Begin Date</value>
+  </data>
+  <data name="StartDateComparision3" xml:space="preserve">
+    <value>BeginDate</value>
+  </data>
+  <data name="StartDateComparision4" xml:space="preserve">
+    <value>Begin</value>
+  </data>
+  <data name="StartDateComparision5" xml:space="preserve">
+    <value>Start Time</value>
+  </data>
+  <data name="StartDateComparision6" xml:space="preserve">
+    <value>StartTime</value>
+  </data>
+  <data name="StartDateComparision7" xml:space="preserve">
+    <value>Begin Time</value>
+  </data>
+  <data name="StartDateComparision8" xml:space="preserve">
+    <value>BeginTime</value>
+  </data>
+  <data name="StartDateComparision9" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="StartDateDisplayValue" xml:space="preserve">
+    <value>Start Date</value>
+  </data>
+  <data name="TimeDecay" xml:space="preserve">
+    <value>Time Decay</value>
+  </data>
+  <data name="TimeDecayToolTip" xml:space="preserve">
+    <value>The time, in days, that the graphic for a visualization is rendered</value>
+  </data>
+  <data name="UpdateRange" xml:space="preserve">
+    <value>Update Range</value>
+  </data>
+  <data name="ViewInWWT" xml:space="preserve">
+    <value>View in WWT</value>
+  </data>
+  <data name="ViewInWWTCallOutText" xml:space="preserve">
+    <value>Once you are done setting the column mappings, Click 'View in WWT' to view data in WWT.</value>
+  </data>
+  <data name="VisualizeMenuCaption" xml:space="preserve">
+    <value>&amp;Visualize in WWT</value>
+  </data>
+  <data name="VisualizeMenuTag" xml:space="preserve">
+    <value>Visualize in WWT Tag</value>
+  </data>
+  <data name="VisualizeSelection" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\VisualizeSelection.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WhatsThisText" xml:space="preserve">
+    <value>What's this?</value>
+  </data>
+  <data name="WWTLabel" xml:space="preserve">
+    <value>WWT Label</value>
+  </data>
+  <data name="WWTLayerGotDeleted" xml:space="preserve">
+    <value>There was an error while processing the current operation. The error might be due to the following scenarios:
+1. The corresponding layer in WWT is deleted.
+2. WWT was closed while performing the operation.
+
+Please make sure the WWT application is open, and try again.</value>
+  </data>
+  <data name="WWTLayerName" xml:space="preserve">
+    <value>WWT Layers</value>
+  </data>
+  <data name="Zoom" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\Zoom.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MappedSunColumnValidationError" xml:space="preserve">
+    <value>Lat (latitude) and Long (longitude) labels need to be mapped to columns in your data to generate visualization.
+
+These are currently not mapped and hence no visualization will be generated. Do you want to continue?</value>
+  </data>
+  <data name="EarthBasedPointDataSampleFileName" xml:space="preserve">
+    <value>Earth Based Point Data Sample.xlsx</value>
+  </data>
+  <data name="ErrorReadingRegistry" xml:space="preserve">
+    <value>An unexpected error occurred. Restart Microsoft Office Excel and then try again. If the problem continues, reinstall {0}.</value>
+  </data>
+  <data name="EarthBasedPointDataSampleLabel" xml:space="preserve">
+    <value>Earth Based Point Data Sample</value>
+  </data>
+  <data name="TargetMachine" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\TargetMachine.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MachineNameLabel" xml:space="preserve">
+    <value>Machine name or IP</value>
+  </data>
+  <data name="TargetMachineLabel" xml:space="preserve">
+    <value>Target Machine</value>
+  </data>
+  <data name="ViewSamplesGalleryLabel" xml:space="preserve">
+    <value>View Samples</value>
+  </data>
+  <data name="ExcelSample" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\ExcelSample.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ViewSamples" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\ViewSamples.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ProductNameShort" xml:space="preserve">
+    <value>WorldWide Telescope Add-in for Excel</value>
+  </data>
+  <data name="SampleFileNotFound" xml:space="preserve">
+    <value>This sample was not found on this computer. Please re-install the Add-in and try again. </value>
+  </data>
+  <data name="SelectLayerComboBoxToolTip" xml:space="preserve">
+    <value>Select a layer from this list to view its properties</value>
+  </data>
+  <data name="DeleteMappingButtonToolTip" xml:space="preserve">
+    <value>Deletes the mapping of the selected layer. Use this to remove the layer from your local layer list.</value>
+  </data>
+  <data name="DistanceUnitComboBoxToolTip" xml:space="preserve">
+    <value>Select the distance unit for the altitude/depth/sea level field</value>
+  </data>
+  <data name="FadeTimeTextBoxToolTip" xml:space="preserve">
+    <value>Specify the duration for the selected fade</value>
+  </data>
+  <data name="FadeTypeComboBoxToolTip" xml:space="preserve">
+    <value>Select the fade effect</value>
+  </data>
+  <data name="GetLayerDataButtonToolTip" xml:space="preserve">
+    <value>Retrieve the data represented by the selected layer</value>
+  </data>
+  <data name="LayerNameTextBoxToolTip" xml:space="preserve">
+    <value>Update the name of the currently selected layer</value>
+  </data>
+  <data name="ShowRangeButtonToolTip" xml:space="preserve">
+    <value>Highlight the range of data represented by the selected layer</value>
+  </data>
+  <data name="UpdateRangeButtonToolTip" xml:space="preserve">
+    <value>Updates the range for the selected layer</value>
+  </data>
+  <data name="DefaultSelectedLayerName" xml:space="preserve">
+    <value>Select One</value>
+  </data>
+  <data name="LayerManagerButtonToolTip" xml:space="preserve">
+    <value>The Layer Manager can be used to access layers available in WWT as well as layers that are stored locally on file.</value>
+  </data>
+  <data name="ViewSamplesButtonToolTip" xml:space="preserve">
+    <value>Contains a set of samples that can be used to understand how to visualize data in Earth and Sky modes using the WorldWide Telescope Add-in for Excel.</value>
+  </data>
+  <data name="VisualizeSelectionButtonToolTip" xml:space="preserve">
+    <value>Select a range of data containing location information to visualize in WWT and click here</value>
+  </data>
+  <data name="LayerManagerButtonScreenTip" xml:space="preserve">
+    <value>Layer Manager</value>
+  </data>
+  <data name="ViewSamplesButtonScreenTip" xml:space="preserve">
+    <value>Sample Files</value>
+  </data>
+  <data name="VisualizeSelectionButtonScreenTip" xml:space="preserve">
+    <value>Visualize Selection</value>
+  </data>
+  <data name="EarthBasedGeometryDataSampleLabel" xml:space="preserve">
+    <value>Earth Based Geometry Data Sample</value>
+  </data>
+  <data name="EarthBasedGeometryDataSampleFileName" xml:space="preserve">
+    <value>Earth Based Geometry Data Sample.xlsx</value>
+  </data>
+  <data name="CaptureViewpointText" xml:space="preserve">
+    <value>Capture Viewpoint</value>
+  </data>
+  <data name="CaptureViewpointButtonScreenTip" xml:space="preserve">
+    <value>Capture Viewpoint</value>
+  </data>
+  <data name="CaptureViewpointButtonSuperTip" xml:space="preserve">
+    <value>Captures the current camera attributes. Use the "Go To Viewpoint" to set the camera back the way it was captured. Captured viewpoints are saved with the workbook.</value>
+  </data>
+  <data name="ManageViewpointButtonLabel" xml:space="preserve">
+    <value>Manage Viewpoints</value>
+  </data>
+  <data name="ManageViewpointButtonScreenTip" xml:space="preserve">
+    <value>Manage Viewpoints</value>
+  </data>
+  <data name="ManageViewpointButtonSuperTip" xml:space="preserve">
+    <value>Options are available to view details, delete or rename any of your captured viewpoints.</value>
+  </data>
+  <data name="GotoViewpointButtonLabel" xml:space="preserve">
+    <value>Go To Viewpoint</value>
+  </data>
+  <data name="GotoViewpointButtonScreenTip" xml:space="preserve">
+    <value>Go To Viewpoint</value>
+  </data>
+  <data name="GotoViewpointButtonSuperTip" xml:space="preserve">
+    <value>Set the camera view based on a captured viewpoint</value>
+  </data>
+  <data name="GotoViewpointFromDataButtonLabel" xml:space="preserve">
+    <value>Go To Viewpoint From Data</value>
+  </data>
+  <data name="GotoViewpointFromDataButtonScreenTip" xml:space="preserve">
+    <value>Go To Viewpoint From Data</value>
+  </data>
+  <data name="GotoViewpointFromDataButtonSuperTip" xml:space="preserve">
+    <value>Go to a point in your data that has been mapped to a layer in WWT.</value>
+  </data>
+  <data name="CaptureViewpoint" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\CaptureViewpoint.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="GotoViewpoint" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\GotoViewpoint.PNG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ManageViewpoint" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\ManageViewpoint.PNG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Network" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\Network.PNG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ViewpointFromData" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\ViewpointFromData.PNG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ReferenceFrame" xml:space="preserve">
+    <value>Reference Frame</value>
+  </data>
+  <data name="MappedLocalInWWTRangeError" xml:space="preserve">
+    <value>The current operation may affect layers which are mapped to the range.
+Do you want to continue?</value>
+  </data>
+  <data name="MappedWWTRangeError" xml:space="preserve">
+    <value>The current operation would impact an existing layer. Please select another cell to get layer data. </value>
+  </data>
+  <data name="RangeHasFormulaWarning" xml:space="preserve">
+    <value>Current operation will cause loss of formulae from the range. To ensure you don't lose this information, click No and get layer data in a new workbook.
+
+Do you want to continue?</value>
+  </data>
+  <data name="RefreshLayerData" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="CaptureViewpointFrameLabel" xml:space="preserve">
+    <value>Reference Frame</value>
+  </data>
+  <data name="CaptureViewpointLatitudeLabel" xml:space="preserve">
+    <value>Latitude</value>
+  </data>
+  <data name="CaptureViewpointLongitudeLabel" xml:space="preserve">
+    <value>Longitude</value>
+  </data>
+  <data name="CaptureViewpointProperties" xml:space="preserve">
+    <value>Viewpoint Properties</value>
+  </data>
+  <data name="CaptureViewpointRateLabel" xml:space="preserve">
+    <value>Time Rate</value>
+  </data>
+  <data name="CaptureViewpointRotationLabel" xml:space="preserve">
+    <value>Rotation</value>
+  </data>
+  <data name="CaptureViewpointTiltLabel" xml:space="preserve">
+    <value>Tilt</value>
+  </data>
+  <data name="CaptureViewpointTimeLabel" xml:space="preserve">
+    <value>Observing Time</value>
+  </data>
+  <data name="CaptureViewpointZoomLabel" xml:space="preserve">
+    <value>Zoom Level</value>
+  </data>
+  <data name="CancelLabel" xml:space="preserve">
+    <value>_Cancel</value>
+  </data>
+  <data name="OkLabel" xml:space="preserve">
+    <value>_OK</value>
+  </data>
+  <data name="CaptureViewpointDescription" xml:space="preserve">
+    <value>Viewpoint Details</value>
+  </data>
+  <data name="ManageViewpointDescription" xml:space="preserve">
+    <value>Manage Viewpoints Description</value>
+  </data>
+  <data name="ManageViewpointText" xml:space="preserve">
+    <value>Manage Viewpoints</value>
+  </data>
+  <data name="ManageViewpointDecHeader" xml:space="preserve">
+    <value>Declination</value>
+  </data>
+  <data name="ManageViewpointDeleteLabel" xml:space="preserve">
+    <value>_Delete</value>
+  </data>
+  <data name="ManageViewpointFrameHeader" xml:space="preserve">
+    <value>Reference Frame</value>
+  </data>
+  <data name="ManageViewpointGotoViewpointLabel" xml:space="preserve">
+    <value>_Go To Viewpoint</value>
+  </data>
+  <data name="ManageViewpointLatHeader" xml:space="preserve">
+    <value>Latitude</value>
+  </data>
+  <data name="ManageViewpointLongHeader" xml:space="preserve">
+    <value>Longitude</value>
+  </data>
+  <data name="ManageViewpointNameHeader" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="ManageViewpointObservingTimeHeader" xml:space="preserve">
+    <value>Observing Time</value>
+  </data>
+  <data name="ManageViewpointRAHeader" xml:space="preserve">
+    <value>Right Ascension</value>
+  </data>
+  <data name="ManageViewpointRenameLabel" xml:space="preserve">
+    <value>_Rename</value>
+  </data>
+  <data name="ManageViewpointRotationHeader" xml:space="preserve">
+    <value>Rotation</value>
+  </data>
+  <data name="ManageViewpointTiltHeader" xml:space="preserve">
+    <value>Tilt</value>
+  </data>
+  <data name="ManageViewpointTimeRateHeader" xml:space="preserve">
+    <value>Time Rate</value>
+  </data>
+  <data name="ManageViewpointZoomHeader" xml:space="preserve">
+    <value>Zoom</value>
+  </data>
+  <data name="CaptureViewpointDecLabel" xml:space="preserve">
+    <value>Declination</value>
+  </data>
+  <data name="CaptureViewpointLookAtLabel" xml:space="preserve">
+    <value>Look At</value>
+  </data>
+  <data name="CaptureViewpointRALabel" xml:space="preserve">
+    <value>Right Ascension</value>
+  </data>
+  <data name="ManageViewpointLookAtHeader" xml:space="preserve">
+    <value>Look At</value>
+  </data>
+  <data name="LayerGroupCreationError" xml:space="preserve">
+    <value>The layer group this layer belongs to could not be created. This may be because:
+       1. The layer group is already present in WWT under a different path
+       2. WWT is not accessible
+
+Try creating the group at the same path and try again.</value>
+  </data>
+  <data name="ReferenceFrameCreationError" xml:space="preserve">
+    <value>Layers that fall under custom reference frames cannot be automatically created. Please create the custom reference frame manually under the same path and try again.</value>
+  </data>
+  <data name="DecDisplayValue" xml:space="preserve">
+    <value>Dec</value>
+  </data>
+  <data name="DecComparisonValue1" xml:space="preserve">
+    <value>Declination</value>
+  </data>
+  <data name="RADisplayValue" xml:space="preserve">
+    <value>RA</value>
+  </data>
+  <data name="RAComparisonValue1" xml:space="preserve">
+    <value>Right Ascension</value>
+  </data>
+  <data name="ScaleTypeStellarMagnitude" xml:space="preserve">
+    <value>Stellar Magnitude</value>
+  </data>
+  <data name="MappedSkyColumnValidationError" xml:space="preserve">
+    <value>RA (right ascension) and Dec (declination) labels need to be mapped to columns in your data to generate visualization.
+
+These are currently not mapped and hence no visualization will be generated. Do you want to continue?</value>
+  </data>
+  <data name="GotoViewpointFromDataForSunError" xml:space="preserve">
+    <value>At least Lat (latitude) and Long (longitude) need to be mapped to go to the point in WorldWide Telescope.</value>
+  </data>
+  <data name="GotoViewpointFromDataSelectionError" xml:space="preserve">
+    <value>Current selection is not part of a range that is mapped to a layer in WorldWide Telescope. To map a range, select your data and click on Visualize Selection. </value>
+  </data>
+  <data name="RADegree" xml:space="preserve">
+    <value>Degrees</value>
+  </data>
+  <data name="RAHour" xml:space="preserve">
+    <value>Hours</value>
+  </data>
+  <data name="RAUnit" xml:space="preserve">
+    <value>RA Units</value>
+  </data>
+  <data name="RAUnitComboboxToolTip" xml:space="preserve">
+    <value>Select the unit for the right ascension column is represented with</value>
+  </data>
+  <data name="TargetMachineButtonLabel" xml:space="preserve">
+    <value>Connect Remotely</value>
+  </data>
+  <data name="TargetMachineButtonScreenTip" xml:space="preserve">
+    <value>Target Machine</value>
+  </data>
+  <data name="TargetMachineButtonToolTip" xml:space="preserve">
+    <value>Specify the machine name or the IP to which you would like to connect to. Layer information will be obtained from the WWT running on the specified machine. By default, this is populated with your local machine IP address.</value>
+  </data>
+  <data name="SaveButtonLabel" xml:space="preserve">
+    <value>_Save</value>
+  </data>
+  <data name="Help" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\Help.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HelpButtonLabel" xml:space="preserve">
+    <value>WWT Add-in for Excel Help</value>
+  </data>
+  <data name="HelpButtonScreenTip" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="HelpButtonToolTip" xml:space="preserve">
+    <value>Contains detailed help on how to use the WorldWide Telescope Add-in for Excel</value>
+  </data>
+  <data name="HelpGroupLabel" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="DefaultViewpointText" xml:space="preserve">
+    <value>Viewpoint</value>
+  </data>
+  <data name="SampleAstronomyGeometryFile" xml:space="preserve">
+    <value>Astronomy Based Geometry Data Sample.xlsx</value>
+  </data>
+  <data name="SampleAstronomyPointBasedFile" xml:space="preserve">
+    <value>Astronomy Based Point Data Sample.xlsx</value>
+  </data>
+  <data name="AstronomyBasedGeometryDataSampleLabel" xml:space="preserve">
+    <value>Astronomy Based Geometry Data Sample</value>
+  </data>
+  <data name="AstronomyBasedPointDataSampleLabel" xml:space="preserve">
+    <value>Astronomy Based Point Data Sample</value>
+  </data>
+  <data name="GotoViewpointFromGeometryDataError" xml:space="preserve">
+    <value>Cannot go to a viewpoint from data containing Geometry data.</value>
+  </data>
+  <data name="ContactUsButtonLabel" xml:space="preserve">
+    <value>Contact Us</value>
+  </data>
+  <data name="ContactUsButtonScreenTip" xml:space="preserve">
+    <value>Contact Us</value>
+  </data>
+  <data name="ContactUsButtonToolTip" xml:space="preserve">
+    <value>Send us an email if you have any suggestions or questions.</value>
+  </data>
+  <data name="Feedback" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\Feedback.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Mail" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\Mail.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="GotoViewpointFromDataForSkyError" xml:space="preserve">
+    <value>At least RA (right ascension) and Dec (declination) need to be mapped to go to the point in WorldWide Telescope.</value>
+  </data>
+  <data name="GotoViewpointfromInvalidLatLonError" xml:space="preserve">
+    <value>The Lat (latitude) and Long (longitude) need to contain valid numeric values to go to the point in WorldWide Telescope.</value>
+  </data>
+  <data name="FeedbackGalleryScreenTip" xml:space="preserve">
+    <value>Provide Feedback</value>
+  </data>
+  <data name="FeedbackGallerySuperTip" xml:space="preserve">
+    <value>Provide feedback that will help us to deliver a better experience and resolve any issues you encounter</value>
+  </data>
+  <data name="FeedbackSurveyLabel" xml:space="preserve">
+    <value>Participate in our Online Survey</value>
+  </data>
+  <data name="Survey" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\Survey.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="VisitForumLabel" xml:space="preserve">
+    <value>Visit our Forum</value>
+  </data>
+  <data name="FeedbackGalleryLabel" xml:space="preserve">
+    <value>Feedback</value>
+  </data>
+  <data name="Earth" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\Earth.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Sky" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\Sky.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DownloadUpdatesButtonLabel" xml:space="preserve">
+    <value>Update the WWT Add-in for Excel</value>
+  </data>
+  <data name="DownloadUpdatesButtonScreenTip" xml:space="preserve">
+    <value>Download Updates</value>
+  </data>
+  <data name="DownloadUpdatesButtonToolTip" xml:space="preserve">
+    <value>An updated version of the WorldWide Telescope Add-in for Excel is available. Click here to download and install.</value>
+  </data>
+  <data name="DownloadUpdate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\DownloadUpdate.PNG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DownloadUpdatesButtonDownloadCompletedLabel" xml:space="preserve">
+    <value>Download Complete</value>
+  </data>
+  <data name="DownloadUpdatesButtonDownloadingLabel" xml:space="preserve">
+    <value>Downloading Update...</value>
+  </data>
+  <data name="RAComparisonValue2" xml:space="preserve">
+    <value>RightAscension</value>
+  </data>
+  <data name="Update" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\images\update.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="GotoViewpointfromInvalidRaDecError" xml:space="preserve">
+    <value>The RA (Right Ascention) and Dec (Declination) need to contain valid numeric values to go to the point in WorldWide Telescope.</value>
+  </data>
+  <data name="AltitudeComparision2" xml:space="preserve">
+    <value>Elev</value>
+  </data>
+  <data name="AltitudeComparision3" xml:space="preserve">
+    <value>Elevation</value>
+  </data>
+  <data name="LayerHeader" xml:space="preserve">
+    <value>Layer</value>
+  </data>
+  <data name="MarkerHeader" xml:space="preserve">
+    <value>Marker</value>
+  </data>
+  <data name="MarkerTypeLabel" xml:space="preserve">
+    <value>Marker Type</value>
+  </data>
+  <data name="ShowFarSideCheckbox" xml:space="preserve">
+    <value>Show Far Side Markers</value>
+  </data>
+  <data name="MarkerToolTip" xml:space="preserve">
+    <value>Select the way you would like to see your individual data points represented.</value>
+  </data>
+  <data name="MarkerSubHeader" xml:space="preserve">
+    <value>Markers</value>
+  </data>
+  <data name="LayerInSyncInfoText" xml:space="preserve">
+    <value>The layer is now linked to WWT. Changes to the data or to the visualization properties will reflect immediately.</value>
+  </data>
+  <data name="MapColumnFloatingText" xml:space="preserve">
+    <value>To map additional columns, include the column in your selection range and click the "Update Range" button available above.</value>
+  </data>
+  <data name="XDisplayValue" xml:space="preserve">
+    <value>X</value>
+  </data>
+  <data name="YDisplayValue" xml:space="preserve">
+    <value>Y</value>
+  </data>
+  <data name="ZDisplayValue" xml:space="preserve">
+    <value>Z</value>
+  </data>
+  <data name="XReverseDisplayValue" xml:space="preserve">
+    <value>ReverseX</value>
+  </data>
+  <data name="YReverseDisplayValue" xml:space="preserve">
+    <value>ReverseY</value>
+  </data>
+  <data name="ZReverseDisplayValue" xml:space="preserve">
+    <value>ReverseZ</value>
+  </data>
+  <data name="MappedXYZColumnValidationError" xml:space="preserve">
+    <value>X (XAxis) and Y(YAxis) labels need to be mapped to columns in your data to generate visualization.
+
+These are currently not mapped and hence no visualization will be generated. Do you want to continue?</value>
+  </data>
+  <data name="GotoViewpointfromXYZError" xml:space="preserve">
+    <value>Cannot fly to a layer consisting of rectangular co-ordinates (XYZ) based data.</value>
+  </data>
+  <data name="Forum" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\Forum.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TryAgainErrorMessage" xml:space="preserve">
+    <value>An error has occurred while performing the current operation. Please try again.</value>
+  </data>
+  <data name="Pins" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\Pins.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SelectMarkerLabel" xml:space="preserve">
+    <value>Select a Marker</value>
+  </data>
+  <data name="XReverseComparision1" xml:space="preserve">
+    <value>-X</value>
+  </data>
+  <data name="YReverseComparision1" xml:space="preserve">
+    <value>-Y</value>
+  </data>
+  <data name="ZReverseComparision1" xml:space="preserve">
+    <value>-Z</value>
+  </data>
+  <data name="DistanceComparision1" xml:space="preserve">
+    <value>Dis</value>
+  </data>
+  <data name="DistanceComparision2" xml:space="preserve">
+    <value>Dist</value>
+  </data>
+  <data name="DistanceDisplayValue" xml:space="preserve">
+    <value>Distance</value>
+  </data>
+  <data name="FetchButtonLabel" xml:space="preserve">
+    <value>Fetch</value>
+  </data>
+  <data name="FetchClimateViewText" xml:space="preserve">
+    <value>Fetch Climate</value>
+  </data>
+  <data name="FetchClimateScreenTip" xml:space="preserve">
+    <value>Fetch Climate</value>
+  </data>
+  <data name="FetchClimateToolTip" xml:space="preserve">
+    <value>Get the data from Fetch Climate API.</value>
+  </data>
+  <data name="UpdateButtonLabel" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="UpdateWizardText" xml:space="preserve">
+    <value>Update Wizard</value>
+  </data>
+  <data name="GenerateColumns" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\GenerateColumns.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="demoicon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\demoicon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="location" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Images\location.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CrashWarningAlertsCheckbox" xml:space="preserve">
+    <value>Enable Rendering Timeout Alert</value>
+  </data>
+  <data name="CrashWarningSubHeader" xml:space="preserve">
+    <value>Rendering Timeout Warning</value>
+  </data>
+  <data name="CrashWarningToolTip" xml:space="preserve">
+    <value>Enables warning message to analyze if a rendering timeout could occur</value>
+  </data>
+  <data name="RenderingThresholdWarning" xml:space="preserve">
+    <value>The selected data may be too dense and/or bright, slowing WWT performance.__NEW_LINE____NEW_LINE__Do you want to continue?</value>
+  </data>
+</root>
