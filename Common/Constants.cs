@@ -836,7 +836,7 @@ namespace Microsoft.Research.Wwt.Excel.Common
         {
             get
             {
-                return new List<string>() { "lon", "ln", "longitude" };
+                return new List<string>() { "lon", "ln", "longitude", "lng" };
             }
         }
     }
