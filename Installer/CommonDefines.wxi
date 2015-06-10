@@ -15,7 +15,7 @@
     <?define ProductDescription="WorldWide Telescope Add-in for Excel"?>
 
     <!-- Build version number and GUID-->
-    <?define RTMVersionNumber="1.0.8.0"?>
+    <?define RTMVersionNumber="1.0.9.0"?>
     <?define ProductGuid="8AC4CA26-65CF-49CF-8E6E-7F2ABFDB48C2"?>
 
     <!-- WWT Folder names -->
